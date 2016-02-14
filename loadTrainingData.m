@@ -10,5 +10,4 @@ else
     [featuresData,depthData] = generateTrainingData();
     save trainingData featuresData depthData
 end
-
 end
