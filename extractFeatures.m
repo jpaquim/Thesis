@@ -1,27 +1,25 @@
 function features = extractFeatures(img,filters,channels,p)
-%GENERATEFEATURES Summary of this function goes here
+%EXTRACTFEATURES Summary of this function goes here
 %   Detailed explanation goes here
 
 nFilters = length(channels); % number of filters applied
-nFeatures = 2*length(channels);
+nFeatures = 2*p.nScales*length(channels);
 features = zeros(p.nPatches,nFeatures); % feature vector
 for i = 1:nFilters
 %     apply the filters to the corresponding image channels
-    imgFilt = imfilter(img(:,:,channels(i)),filters{i});
-%     imagesc(filters{i}); colormap('gray'); pause;
-%     imagesc(imgFilt); pause;
-%     split image into patches, calculate the energies for each patch,
-    for col = 1:p.nCols
-        indCols = p.patchCols(col)+p.colInterval;
-        for row = 1:p.nRows
-            indRows = p.patchRows(row)+p.rowInterval;
-            imgPatch = imgFilt(indRows,indCols);
-            ind = row+(col-1)*p.nRows;
-            features(ind,i) = sum(abs(imgPatch(:)));
-            features(ind,i+nFilters) = sum(imgPatch(:).^2);
-%             pause
-        end
+    imgFilt = imfilter(img(:,:,channels(i)),filters{i},...
+        'symmetric','conv');
+%     Saxena et al use conv2, with the 'valid' option, and then extend the
+%     image back to the original size by replicating the outside pixels
+
+    for scl = 1:p.nScales % three different size scales
+%         split image into patches
+        imgPatches = imgFilt(p.linInd{scl});
+%         imagesc(reshape(imgPatches(1,:),p.patchSize)); colormap gray; pause;
+        ind = 2*(scl+(i-1)*p.nScales);
+%         calculate the energies for each patch
+        features(:,ind-1) = sum(abs(imgPatches),2);
+        features(:,ind) = sum(imgPatches.^2,2);
     end
-%     at different size scales
 end
 end

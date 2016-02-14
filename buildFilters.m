@@ -25,27 +25,43 @@ filtAvg = filtLaws(1);
 channels(10) = 2;
 channels(11) = 3;
 
-% Oriented edge filters
-dimFilt = 5; offset = 2; % dimension of filter stencil?
-dimAux = dimFilt+offset;
-midElem = (dimAux+1)/2;
-filtAux = ones(dimAux);
-filtAux(:,1:(midElem-1)) = -1;
-filtAux(:,midElem) = 0;
-rotateAndCrop = @(mask,deg) imcrop(imrotate(mask,deg,'bilinear','crop'),...
-                            [1+offset/2 1+offset/2 dimFilt-1 dimFilt-1]);
-filtEdge = cell(1,6);
-for i = 1:6
-%     imagesc(rotateAndCrop(filtAux,(i-1)*30)); colormap gray; pause;
-    filtEdge{i} = rotateAndCrop(filtAux,(i-1)*30);
-end
+% Oriented edge filters, ad-hoc solution
+% dimFilt = 5; offset = 2; % dimension of filter stencil
+% dimAux = dimFilt+offset;
+% midElem = (dimAux+1)/2;
+% filtAux = ones(dimAux);
+% filtAux(:,1:(midElem-1)) = -1;
+% filtAux(:,midElem) = 0;
+% rotateAndCrop = @(mask,deg) imcrop(imrotate(mask,deg,'bilinear','crop'),...
+%                             [1+offset/2 1+offset/2 dimFilt-1 dimFilt-1]);
+% filtEdge = cell(1,6);
+% for i = 1:6
+%     filtEdge{i} = rotateAndCrop(filtAux,(i-1)*30);
+% end
+
+% Actual filters used by Saxena et al
+% Nevatia-Babu filters oriented edge filters
+filtEdge{1} = repmat([-100 -100 0 100 100],5,1);    % 0 deg
+filtEdge{2} = [-100 32 100 100 100;                 % 30 deg
+               -100 -78 92 100 100;
+               -100 -100 0 100 100;
+               -100 -100 -92 78 100;
+               -100 -100 -100 -32 100];
+filtEdge{3} = -filtEdge{2}';                        % 60 deg
+filtEdge{4} = -filtEdge{1}';                        % 90 deg
+filtEdge{5} = fliplr(filtEdge{3});                  % 120 deg
+filtEdge{6} = filtEdge{5}';                         % 150 deg
+
 % applied to intensity to capture texture gradient
 channels(12:17) = 1;
 
 filters = [filtLaws,filtAvg,filtAvg,filtEdge];
-% for i = 1:length(filters)
-%     normFactor = sum(sum(abs(filters{i})));
-%     filters{i} = filters{i}/normFactor; % normalize the filter?
-% end
+for i = 1:length(filters)
+    normFactor = sum(abs(filters{i}(:)));
+    filters{i} = filters{i}/normFactor;
+%     imagesc(filters{i}); colormap gray; pause;
+end
+
+% TODO: investigate filter and image normalization, same as Saxena?
 
 end

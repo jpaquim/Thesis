@@ -9,15 +9,17 @@ function [featuresData,depthData] = generateTrainingData()
 folderName = './data/Train400Img/';
 files = dir([folderName '*.jpg']);
 % nFiles = length(files);
-nFiles = 10; % for testing purposes
+nFiles = 5; % for testing purposes
 
-p = patchConfiguration(); % define a structure p whose fields contain
-% the configuration of the image patches, including centroid locations.
+% a structure whose fields contain the configuration of the image and
+% patches, including centroid locations.
+p = loadPatchConfiguration();
 
 nTrainingCases = nFiles*p.nPatches;
-nFeatures = 2*length(channels);
+nFeatures = 2*p.nScales*length(channels);
 featuresData = zeros(nTrainingCases,nFeatures);
 for i = 1:nFiles
+    fprintf('File: %d\n',i);
     filePath = [folderName files(i).name];
 %     read image, and convert to YCbCr color space
     imgRGB = imread(filePath);
