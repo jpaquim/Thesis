@@ -9,11 +9,11 @@ function [featuresData,depthData] = generateTrainingData()
 folderName = './data/Train400Img/';
 files = dir([folderName '*.jpg']);
 % nFiles = length(files);
-nFiles = 5; % for testing purposes
+nFiles = 10; % for testing purposes
 
 % a structure whose fields contain the configuration of the image and
 % patches, including centroid locations.
-p = patchConfiguration([2272 1704],[305 55],[7 7],3); % [21 21]);
+p = patchConfiguration([2272 1704],[55 305],[5 5],3); % [21 21]);
 
 nTrainingCases = nFiles*p.nPatches;
 nFeatures = 2*p.nScales*length(channels);
