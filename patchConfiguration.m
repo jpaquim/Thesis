@@ -15,7 +15,9 @@ p.patchWidth = patchSize(2);
 
 % grid of patch centers
 p.firstRow = ceil(p.patchHeight/2);
+% p.firstRow = 17;
 p.firstCol = ceil(p.patchWidth/2);
+% p.firstCol = 17;
 p.patchRows = linspace(p.firstRow,p.height-p.firstRow,p.nRows);
 p.patchCols = linspace(p.firstCol,p.width-p.firstCol,p.nCols);
 p.patchRows = round(p.patchRows);

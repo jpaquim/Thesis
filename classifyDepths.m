@@ -7,6 +7,7 @@ nClasses = 10; % TODO: discover optimal number of classes
 
 % ends of the intervals
 edges = logspace(0,log10(82),nClasses+1);
+% try 1/depth
 leftEdges = edges(1:end-1);
 rightEdges = edges(2:end);
 
