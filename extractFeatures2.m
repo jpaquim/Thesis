@@ -13,13 +13,11 @@ for flt = 1:nFilters
 %     image back to the original size by replicating the outside pixels
     for scl = 1:p.nScales
 %         split image into patches
-        for ptc = 1:p.nPatches
-            imgPatch = imgFilt(p.indRows{scl}(:,ptc),p.indCols{scl}(:,ptc));
-            feat = 2*(scl+(flt-1)*p.nScales);
-%             calculate the energies for each patch
-            features(ptc,feat-1) = sum(abs(imgPatch(:)));
-            features(ptc,feat) = sum(imgPatch(:).^2);
-        end
+        imgPatches = imgFilt(p.linInd{scl});
+        ft = 2*(scl+(flt-1)*p.nScales);
+%         calculate the energies for each patch
+        features(:,ft-1) = sum(abs(imgPatches))';
+        features(:,ft) = sum(imgPatches.^2)';
     end
 end
 end
