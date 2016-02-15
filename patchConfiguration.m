@@ -1,11 +1,11 @@
-function p = generatePatchConfiguration(imageSize,gridSize,patchSize)
-%GENERATEPATCHCONFIGURATION Summary of this function goes here
+function p = patchConfiguration(imageSize,gridSize,patchSize,nScales)
+%PATCHCONFIGURATION Summary of this function goes here
 %   Detailed explanation goes here
 
 % image size in pixels
 p.height = imageSize(1);
 p.width = imageSize(2);
-% number of columns and rows in the depth data, corresponding to patches
+% number of columns and rows of patches, corresponding to the depth data
 p.nRows = gridSize(1); 
 p.nCols = gridSize(2);
 p.nPatches = p.nRows*p.nCols;
@@ -21,7 +21,7 @@ p.patchCols = linspace(p.firstCol,p.width-p.firstCol,p.nCols);
 p.patchRows = round(p.patchRows);
 p.patchCols = round(p.patchCols);
 
-p.nScales = 3; % number of different size scales
+p.nScales = nScales; % number of different size scales
 p.indRows = cell(1,p.nScales);
 p.indCols = cell(1,p.nScales);
 for scl = 1:p.nScales
