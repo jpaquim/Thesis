@@ -1,6 +1,8 @@
-function features = extractFeatures(img,filters,channels,p)
+function features = extractFeatures(imgRGB,filters,channels,p)
 %EXTRACTFEATURES Summary of this function goes here
 %   Detailed explanation goes here
+
+img = double(rgb2ycbcr(imgRGB)); % convert to YCbCr color space
 
 nFilters = length(channels); % number of filters applied
 nFeatures = 2*p.nScales*length(channels);
