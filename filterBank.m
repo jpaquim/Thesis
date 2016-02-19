@@ -1,5 +1,5 @@
-function [filters,channels] = buildFilters()
-%BUILDFILTERS Summary of this function goes here
+function [filters,channels] = filterBank()
+%FILTERBANK Summary of this function goes here
 %   Detailed explanation goes here
 
 % Laws' masks (3x3, from Davies)

@@ -8,3 +8,4 @@ for i = 1:nClasses
     ind = find(data == i);
     binData(:,ind) = repmat(I(:,i),1,length(ind));
 end
+end
