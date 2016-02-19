@@ -14,12 +14,14 @@ p.patchHeight = patchSize(1);
 p.patchWidth = patchSize(2);
 
 % grid of patch centers
-p.firstRow = ceil(p.patchHeight/2);
-% p.firstRow = 20;
-p.firstCol = ceil(p.patchWidth/2);
-% p.firstCol = 20;
-p.patchRows = linspace(p.firstRow,p.height-p.firstRow,p.nRows);
-p.patchCols = linspace(p.firstCol,p.width-p.firstCol,p.nCols);
+firstRow = ceil(3^(nScales-1)*p.patchHeight/2);
+% firstRow = ceil(p.patchHeight/2);
+% firstRow = 20;
+firstCol = ceil(3^(nScales-1)*p.patchWidth/2);
+% firstCol = ceil(p.patchWidth/2);
+% firstCol = 20;
+p.patchRows = linspace(firstRow,p.height-firstRow,p.nRows);
+p.patchCols = linspace(firstCol,p.width-firstCol,p.nCols);
 p.patchRows = round(p.patchRows);
 p.patchCols = round(p.patchCols);
 
@@ -27,11 +29,11 @@ p.nScales = nScales; % number of different size scales
 p.indRows = cell(1,p.nScales);
 p.indCols = cell(1,p.nScales);
 for scl = 1:p.nScales
-    p.halfHeight(scl) = floor(3^(scl-1)*p.patchHeight/2);
-    p.halfWidth(scl) = floor(3^(scl-1)*p.patchWidth/2);
-%     ranges around the patch center
-    rowRange = -p.halfHeight(scl):p.halfHeight(scl);
-    colRange = -p.halfWidth(scl):p.halfWidth(scl);
+    halfHeight = floor(3^(scl-1)*p.patchHeight/2);
+    halfWidth = floor(3^(scl-1)*p.patchWidth/2);
+%     range of rows and columns around the patch centers
+    rowRange = -halfHeight:halfHeight;
+    colRange = -halfWidth:halfWidth;
     p.indRows{scl} = zeros(length(rowRange),p.nPatches);
     p.indCols{scl} = zeros(length(colRange),p.nPatches);
     for row = 1:p.nRows
