@@ -1,3 +1,7 @@
+addpath('./Features');
+addpath('./Misc');
+addpath('./Textons');
+
 % load the training data set
 [trainingFeatures,trainingLabels] = loadData('training');
 % load the test data set
@@ -20,5 +24,5 @@ predictedTraining = predict(trainingLabels,sparse(trainingFeatures),model);
 predictedTest = predict(testLabels,sparse(testFeatures),model);
 
 % plot confusion matrices for performance on training and test sets
-plotConfusionMatrix(testLabels,predictedTraining);
-figure; plotConfusionMatrix(trainingLabels,predictedTest);
+plotConfusionMatrix(trainingLabels,predictedTraining);
+figure; plotConfusionMatrix(testLabels,predictedTest);

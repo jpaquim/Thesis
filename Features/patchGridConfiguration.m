@@ -1,5 +1,5 @@
-function p = patchConfiguration(imageSize,gridSize,patchSize,nScales)
-%PATCHCONFIGURATION Summary of this function goes here
+function p = patchGridConfiguration(imageSize,gridSize,patchSize,nScales)
+%PATCHGRIDCONFIGURATION Summary of this function goes here
 %   Detailed explanation goes here
 
 % image size in pixels
@@ -44,6 +44,12 @@ for scl = 1:p.nScales
                 min(max(p.patchRows(row)+rowRange,1),p.height);
             p.indCols{scl}(:,ind) = ...
                 min(max(p.patchCols(col)+colRange,1),p.width);
+            if scl == 1
+                p.indRowsTxt(:,ind) = ...
+                    min(max(p.patchRows(row)+(-2:2),1),p.height);
+                p.indColsTxt(:,ind) = ...
+                    min(max(p.patchCols(col)+(-2:2),1),p.width);
+            end
         end
     end
 end
