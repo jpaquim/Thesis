@@ -9,18 +9,24 @@ function [features,labels] = generateData(type)
 % if nFiles ~= nFiles2 % basic error checking
 %     error('Unbalanced image and depth data');
 % end
-nFiles = 10; % for testing purposes
+nFiles = 2; % for testing purposes
 
 % a structure whose fields contain the configuration of the image and
 % patches, including centroid locations.
 imgInfo = imfinfo(imgFiles{1}); % read resolution from the first image
-p = patchConfiguration([imgInfo.Height imgInfo.Width],[55 305],[11 11],1);
+p = patchGridConfiguration([imgInfo.Height imgInfo.Width],...
+                           [55 305],[11 11],1);
 
 % load the various filters to be applied to the images
 [filters,channels] = filterBank();
 
+% load the texton dictionary
+textons = loadDictionary('gray');
+
 nInstances = nFiles*p.nPatches; % number of training/test instances
-nFeatures = 2*p.nScales*length(channels);
+nFeaturesSax = 2*p.nScales*length(channels);
+nFeaturesTxt = 30;
+nFeatures = nFeaturesSax+nFeaturesTxt;
 features = zeros(nInstances,nFeatures);
 labels = zeros(nInstances,1);
 for i = 1:nFiles
@@ -28,7 +34,7 @@ for i = 1:nFiles
 %     read image from file, and extract the features
     imgRGB = imread(imgFiles{i});
     ind = (1:p.nPatches)+(i-1)*p.nPatches;
-    features(ind,:) = extractFeatures(imgRGB,filters,channels,p);
+    features(ind,:) = extractFeatures(imgRGB,filters,channels,textons,p);
     
 %     load and label the depth data into discrete classes
     load(depthFiles{i});
