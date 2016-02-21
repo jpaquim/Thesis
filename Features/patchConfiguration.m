@@ -1,10 +1,10 @@
-function p = patchGridConfiguration(imageSize,gridSize,patchSize,nScales)
-%PATCHGRIDCONFIGURATION Summary of this function goes here
+function p = patchConfiguration(gridSize,patchSize,nScales,t)
+%PATCHCONFIGURATION Summary of this function goes here
 %   Detailed explanation goes here
 
 % image size in pixels
-p.height = imageSize(1);
-p.width = imageSize(2);
+p.height = t.height;
+p.width = t.width;
 % number of columns and rows of patches, corresponding to the depth data
 p.nRows = gridSize(1); 
 p.nCols = gridSize(2);
@@ -24,6 +24,11 @@ p.patchRows = linspace(firstRow,p.height-firstRow,p.nRows);
 p.patchCols = linspace(firstCol,p.width-firstCol,p.nCols);
 p.patchRows = round(p.patchRows);
 p.patchCols = round(p.patchCols);
+
+txtHalfHeight = floor(t.txtHeight/2);
+txtHalfWidth = floor(t.txtWidth/2);
+txtRowRange = -txtHalfHeight:txtHalfHeight;
+txtColRange = -txtHalfWidth:txtHalfWidth;
 
 p.nScales = nScales; % number of different size scales
 p.indRows = cell(1,p.nScales);
@@ -46,9 +51,9 @@ for scl = 1:p.nScales
                 min(max(p.patchCols(col)+colRange,1),p.width);
             if scl == 1
                 p.indRowsTxt(:,ind) = ...
-                    min(max(p.patchRows(row)+(-2:2),1),p.height);
+                    min(max(p.patchRows(row)+txtRowRange,1),p.height);
                 p.indColsTxt(:,ind) = ...
-                    min(max(p.patchCols(col)+(-2:2),1),p.width);
+                    min(max(p.patchCols(col)+txtColRange,1),p.width);
             end
         end
     end

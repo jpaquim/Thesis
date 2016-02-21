@@ -1,29 +1,16 @@
-function textons = generateDictionary(type)
+function textons = generateDictionary(t)
 %GENERATEDICTIONARY Summary of this function goes here
 %   Detailed explanation goes here
 
-if strcmp(type,'gray')
-    color = 0;
-elseif strcmp(type,'color')
-    color = 1;
-else
-    error(['Invalid dictionary type requested: ' type]);
-end
-
-imgFiles = dataFilePaths('training');
-nFiles = length(imgFiles);
-
-imgInfo = imfinfo(imgFiles{1}); % read resolution from the first image
-% a structure whose fields contain the configuration of the textons
-t = textonConfiguration([imgInfo.Height imgInfo.Width],...
-                        [5 5],30,10000,color);
-
 rng(0); % seed random number generator for consistent performance in tests
-imgFiles = imgFiles(randperm(nFiles)); % shuffle the file list
+
+imgFiles = dataFilePaths('training',[],true); % load shuffled image files
+nFiles = length(imgFiles);
+% nFiles = 10; % for testing purposes
 
 textons = zeros(t.linSize,t.nTextons);
 % textons = 255*rand(t.linSize,t.nTextons);
-for i = 1:100
+for i = 1:nFiles
     fprintf('File: %d\n',i);
     img = double(rgb2ycbcr(imread(imgFiles{i})));
     if ~t.color % use only the intensity channel
@@ -49,7 +36,7 @@ end
 
 for i = 1:t.nTextons
     subplot(5,6,i);
-    txt = reshape(textons(:,i),t.textonHeight,t.textonWidth,1+2*t.color);
+    txt = reshape(textons(:,i),t.txtHeight,t.txtWidth,1+2*t.color);
     imagesc(txt(:,:,:)); colormap gray;
 end
 end

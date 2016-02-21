@@ -1,27 +1,17 @@
-function [features,labels] = generateData(type)
+function [features,labels,indFiles] = generateData(type,p,t)
 %GENERATEDATA Summary of this function goes here
 %   Detailed explanation goes here
 
 % generate the file paths of both image and depth files
-[imgFiles,depthFiles] = dataFilePaths(type);
+nFiles = 50; % for testing purposes
+[imgFiles,depthFiles,indFiles] = dataFilePaths(type,nFiles,true);
 % nFiles = length(imgFiles);
-% nFiles2 = length(depthFiles);
-% if nFiles ~= nFiles2 % basic error checking
-%     error('Unbalanced image and depth data');
-% end
-nFiles = 2; % for testing purposes
-
-% a structure whose fields contain the configuration of the image and
-% patches, including centroid locations.
-imgInfo = imfinfo(imgFiles{1}); % read resolution from the first image
-p = patchGridConfiguration([imgInfo.Height imgInfo.Width],...
-                           [55 305],[11 11],1);
 
 % load the various filters to be applied to the images
 [filters,channels] = filterBank();
 
 % load the texton dictionary
-textons = loadDictionary('gray');
+textons = loadDictionary(t);
 
 nInstances = nFiles*p.nPatches; % number of training/test instances
 nFeaturesSax = 2*p.nScales*length(channels);
