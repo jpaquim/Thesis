@@ -11,8 +11,8 @@ edges = logspace(log10(0.9),log10(82),nClasses+1);
 leftEdges = edges(1:end-1);
 rightEdges = edges(2:end);
 
-nDepths = length(depths);
-labels = zeros(nDepths,1);
+nDepths = numel(depths);
+labels = zeros(size(depths));
 for i = 1:nDepths
     labels(i) = find(depths(i)>=leftEdges & depths(i)<rightEdges);
 end

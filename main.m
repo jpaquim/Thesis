@@ -1,28 +1,44 @@
+% add the paths of the various modules
 addpath('./Features');
-addpath('./Misc');
+addpath('./Learning');
 addpath('./Textons');
+addpath('./Misc');
+
+ % read image resolution from the first image in the training set
+imgInfo = imfinfo(dataFilePaths('training',1));
+
+% a structure whose fields contain the configuration of the textons
+t = textonConfiguration([imgInfo.Height imgInfo.Width],...
+                        [5 5],30,10000,false);
+% build a structure whose fields contain the configuration of the image and
+% patches, including centroid locations.
+p = patchConfiguration([55 305],[7 7],3,t);
 
 % load the training data set
-[trainingFeatures,trainingLabels] = loadData('training');
+[trainFeatures,trainLabels,indFilesTrain] = loadData('training',p,t);
 % load the test data set
-[testFeatures,testLabels] = loadData('test');
+[testFeatures,testLabels,indFilesTest] = loadData('test',p,t);
 
-[trainingFeatures,offset,scale] = normalizeFeatures(trainingFeatures);
+% normalize the training features to the [-1 1] range
+[trainFeatures,offset,scale] = normalizeFeatures(trainFeatures);
 % normalize the test features using the same offset and scale
 testFeatures = normalizeFeatures(testFeatures,offset,scale);
 
-addpath('./toolboxes/liblinear-2.1/matlab/');
-disp('Starting training'); tic
-% train the linear SVM model
-model = train(trainingLabels,sparse(trainingFeatures),'-s 2 -B 0 -c 1 -q');
-toc; disp('Model trained');
+% return;
 
-% [predictedLabels,accuracy,decisionValues] = ...
+% train the supervised learning model
+model = trainModel(trainFeatures,trainLabels,'linear svm');
+
 % accuracy on the training set
-predictedTraining = predict(trainingLabels,sparse(trainingFeatures),model);
+predictedTrain = predictModel(...
+    trainFeatures,trainLabels,model,'linear svm');
 % accuracy on the test set
-predictedTest = predict(testLabels,sparse(testFeatures),model);
+predictedTest = predictModel(testFeatures,testLabels,model,'linear svm');
 
 % plot confusion matrices for performance on training and test sets
-plotConfusionMatrix(trainingLabels,predictedTraining);
+plotConfusionMatrix(trainLabels,predictedTrain);
 figure; plotConfusionMatrix(testLabels,predictedTest);
+
+% plot example image, ground truth, labels, and prediction
+plotComparison(predictedTrain,indFilesTrain,p,'training');
+plotComparison(predictedTest,indFilesTest,p,'test');
