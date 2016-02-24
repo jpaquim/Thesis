@@ -9,4 +9,10 @@ if strcmp(modelType,'linear svm')
     model = train(labels,sparse(features),'-s 2 -B 0 -c 1 -q');
     toc; disp('Model trained');
 end
+if strcmp(modelType,'logistic ls')
+    model = logisticLeastSquares(features,labels);
+end
+if strcmp(modelType,'calibrated ls')
+    model = calibratedLeastSquares(features,labels);
+end
 end

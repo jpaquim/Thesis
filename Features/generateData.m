@@ -15,10 +15,10 @@ textons = loadDictionary(t);
 
 nInstances = nFiles*p.nPatches; % number of training/test instances
 nFeaturesSax = 2*p.nScales*length(channels);
-nFeaturesTxt = 30;
+nFeaturesTxt = t.nTextons;
 nFeatures = nFeaturesSax+nFeaturesTxt;
-features = zeros(nInstances,nFeatures);
-labels = zeros(nInstances,1);
+features = zeros(nInstances,nFeatures,'single');
+labels = zeros(nInstances,1,'uint8');
 for i = 1:nFiles
     fprintf('File: %d\n',i);
 %     read image from file, and extract the features
