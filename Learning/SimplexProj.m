@@ -2,7 +2,7 @@
 % 
 % It projects each row of matrix Y onto the probability simplex. That is,
 % if y is a 1xD vector, this function solves
-%   min_x |x-y|²   s.t.  x_1+...+x_D = 1, x_i>=0 for i=1,...,D.
+%   min_x |x-y|^2   s.t.  x_1+...+x_D = 1, x_i>=0 for i=1,...,D.
 % 
 % The runtime for a vector of 1xD is O(D.log(D)).
 % The code is efficient and fully vectorised.
@@ -25,4 +25,3 @@ function X = SimplexProj(Y)
 X = sort(Y,2,'descend');
 Xtmp = (cumsum(X,2)-1)*diag(sparse(1./(1:D)));
 X = max(bsxfun(@minus,Y,Xtmp(sub2ind([N,D],(1:N)',sum(X>Xtmp,2)))),0);
-
