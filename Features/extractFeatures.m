@@ -7,7 +7,7 @@ img = single(rgb2ycbcr(imgRGB)); % convert to YCbCr color space
  % Saxena-based features
 nFilters = length(channels); % number of filters applied
 nFeaturesSax = 2*p.nScales*length(channels); % sum of abs and sum of square
-saxFeatures = zeros(p.nPatches,nFeaturesSax,'single');
+saxFeatures = zeros(p.nPatches,nFeaturesSax);
 for flt = 1:nFilters
 %     apply the filters to the corresponding image channels
     imgFilt = imfilter(img(:,:,channels(flt)),filters{flt},...
@@ -26,7 +26,7 @@ end
 
  % Texton-based features (soft-binning, square Euclidean distance)
 nTextons = size(textons,2);
-txtFeatures = zeros(p.nPatches,nTextons,'single');
+txtFeatures = zeros(p.nPatches,nTextons);
 for ptc = 1:p.nPatches
     imgPatch = img(p.indRowsTxt(:,ptc),p.indColsTxt(:,ptc),1);
     texture = reshape(imgPatch,[],1);

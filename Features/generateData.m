@@ -3,7 +3,7 @@ function [features,labels,indFiles] = generateData(type,p,t)
 %   Detailed explanation goes here
 
 % generate the file paths of both image and depth files
-nFiles = 50; % for testing purposes
+nFiles = 10; % for testing purposes
 [imgFiles,depthFiles,indFiles] = dataFilePaths(type,nFiles,true);
 % nFiles = length(imgFiles);
 
@@ -17,8 +17,8 @@ nInstances = nFiles*p.nPatches; % number of training/test instances
 nFeaturesSax = 2*p.nScales*length(channels);
 nFeaturesTxt = t.nTextons;
 nFeatures = nFeaturesSax+nFeaturesTxt;
-features = zeros(nInstances,nFeatures,'single');
-labels = zeros(nInstances,1,'uint8');
+features = zeros(nInstances,nFeatures);
+labels = zeros(nInstances,1);
 for i = 1:nFiles
     fprintf('File: %d\n',i);
 %     read image from file, and extract the features
