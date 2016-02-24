@@ -1,4 +1,4 @@
-function plotComparison(predictedLabels,indFiles,p,type)
+function plotComparison(predictedLabels,indFiles,type,p)
 %PLOTCOMPARISON Summary of this function goes here
 %   Detailed explanation goes here
 
