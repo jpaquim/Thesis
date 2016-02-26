@@ -27,11 +27,11 @@ end
 
 if exist('indFiles','var') % returns only some files
     if exist('shuffle','var') && shuffle
-        if isscalar(indFiles) % if ind is a scalar, treat it as the number
-            nFilesReq = indFiles; % of files requested, selected at random
+        if isscalar(indFiles) % treat it as the number of files requested
+            nFilesReq = indFiles; % selected at random
             indFiles = randperm(nFiles,nFilesReq);
-        elseif isempty(indFiles) % if empty, returns the full file list,
-            indFiles = randperm(nFiles); % but shuffled
+        elseif strcmp(indFiles,'all') % returns the full file list shuffled
+            indFiles = randperm(nFiles);
         else % permute the elements of ind at random
             indFiles = indFiles(randperm(length(indFiles)));
         end
