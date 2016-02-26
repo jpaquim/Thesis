@@ -1,20 +1,23 @@
-function textons = loadDictionary(t)
+function textons = loadDictionary(cfg)
 %LOADDICTIONARY Summary of this function goes here
 %   Detailed explanation goes here
 
-if t.color
+if cfg.txtColor
     fileName = 'colorDictionary.mat';
 else
     fileName = 'grayDictionary.mat';
 end
-if exist(fileName,'file') % if the data file already exists
-    fileVars = load(fileName,'t');
-    if isequal(fileVars.t,t) % and if t is as desired
+% if any of these elements change, the dictionary should be regenerated
+txtConfig = struct('txtSize',cfg.txtSize,'nTextons',cfg.nTextons,...
+                   'nTextures',cfg.nTextures);
+if exist(fileName,'file')
+    fileVars = load(fileName,'txtConfig');
+    if isequal(fileVars.txtConfig,txtConfig)
         load(fileName); % load the data directly from it
         return;
     end
 end
-% if the file doesn't exist, or t has changed, regenerate the data file
-textons = generateDictionary(t);
-save(fileName,'textons','t');
+% if the file doesn't exist, or txtConfig has changed, regenerate the data
+textons = generateDictionary(cfg);
+save(fileName,'textons','txtConfig');
 end

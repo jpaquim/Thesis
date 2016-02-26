@@ -43,7 +43,7 @@ filtEdge{6} = filtEdge{5}';                         % 150 deg
 % applied to intensity to capture texture gradient
 channels(12:17) = 1; % Y channel
 
-filters = [filtLaws,filtAvg,filtAvg,filtEdge];
+filters = [filtLaws filtAvg filtAvg filtEdge];
 % for i = 1:length(filters)
 %     normFactor = sum(abs(filters{i}(:)));
 %     filters{i} = filters{i}/normFactor;

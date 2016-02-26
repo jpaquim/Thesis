@@ -7,4 +7,7 @@ if strcmp(modelType,'linear svm')
     % [predictedLabels,accuracy,decisionValues] = ...
     predictedLabels = predict(labels,sparse(features),model);
 end
+if strcmp(modelType,'calibrated ls')
+    predictedLabels = predictCLS(model,features,labels);
+end
 end

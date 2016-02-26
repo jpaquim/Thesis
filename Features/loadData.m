@@ -1,4 +1,4 @@
-function [features,labels,indFiles] = loadData(type,p,t)
+function [features,labels,indFiles] = loadData(type,cfg)
 %LOADDATA Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -8,13 +8,13 @@ elseif strcmp(type,'test')
     fileName = 'testData.mat';
 end
 if exist(fileName,'file') % if the data file already exists
-    fileVars = load(fileName,'p','t');
-    if isequal(fileVars.p,p) && isequal(fileVars.t,t) % and if p and t are
-        load(fileName); % as desired, load the data directly from it
+    fileVars = load(fileName,'cfg');
+    if isequal(fileVars.cfg,cfg) % and if cfg is the same
+        load(fileName); % load the data directly from it
         return;
     end
 end
-% if the file doesn't exist, or p/t has changed, regenerate the data file
-[features,labels,indFiles] = generateData(type,p,t);
-save(fileName,'features','labels','indFiles','p','t');
+% if the data file doesn't exist, or cfg has changed, regenerate the data
+[features,labels,indFiles] = generateData(type,cfg);
+save(fileName,'features','labels','indFiles','cfg');
 end
