@@ -33,12 +33,12 @@ modelType = 'calibrated ls';
 if regression
     [model,predTrainDepths,predTestDepths] = ...
         regressionModel(trainFeatures,trainDepths,...
-        testFeatures,testDepths,modelType);
+                        testFeatures,testDepths,modelType);
 else
     [model,predTrainLabels,predTestLabels] = ...
         classificationModel(trainFeatures,trainLabels,...
-        testFeatures,testLabels,modelType);
-%     convert labels to depths
+                            testFeatures,testLabels,modelType);
+%     convert labels to depths using the class centers
     predTrainDepths = cfg.classCenters(predTrainLabels)';
     predTestDepths = cfg.classCenters(predTestLabels)';
 %     plot confusion matrices
@@ -50,8 +50,6 @@ end
 plotComparison(predTrainDepths,indFilesTrain,'training',cfg);
 plotComparison(predTestDepths,indFilesTest,'test',cfg);
 
-% Bipin performance metrics
-depthErrorTrain = mean(abs(log(trainDepths)-log(predTrainDepths)))
-relativeDepthErrorTrain = mean(abs((trainDepths-predTrainDepths)./trainDepths))
-depthErrorTest = mean(abs(log(testDepths)-log(predTestDepths)))
-relativeDepthErrorTest = mean(abs((testDepths-predTestDepths)./testDepths))
+% performance metrics
+performanceMetrics(trainDepths,predTrainDepths,'training');
+performanceMetrics(testDepths,predTestDepths,'test');

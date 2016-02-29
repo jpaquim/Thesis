@@ -36,10 +36,4 @@ for t = 1:maxIters
 end
 model.W = W;
 model.WTilde = WTilde;
-% [~,YHatTrain] = max(YHatTrain,[],2);
-% [~,YHatTest] = max(YHatTest,[],2);
-% trainAccuracy = sum(YHatTrain == YTrainCat)/n;
-% testAccuracy = sum(YHatTest == YTestCat)/n;
-% fprintf('Training accuracy: %f\nTest accuracy: %f\n',...
-%         trainAccuracy,testAccuracy);
 end
