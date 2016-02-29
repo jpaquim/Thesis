@@ -30,6 +30,7 @@ cfg.maxDepth = cfg.depthLimits(2);
 cfg.nClasses = 10;
 % type of interval spacing, 'lin' for linear, 'log' for logarithmic,
 cfg.classType = 'opt'; % 'opt' for optimal, uniform distribution of classes
+[cfg.classEdges,cfg.classCenters] = depthIntervals(cfg);
 
 % color or grayscale textons
 cfg.txtColor = false;

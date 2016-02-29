@@ -1,6 +1,7 @@
 % add the paths of the various modules
 addpath('./Features');
-addpath('./Learning');
+addpath('./Classification');
+addpath('./Regression');
 addpath('./Textons');
 addpath('./Misc');
 
@@ -8,29 +9,49 @@ addpath('./Misc');
 cfg = defaultConfig();
 
 % load the training data set
-[trainFeatures,trainLabels,indFilesTrain] = loadData('training',cfg);
+[trainFeatures,trainDepths,trainLabels,indFilesTrain] = ...
+    loadData('training',cfg);
 % load the test data set
-[testFeatures,testLabels,indFilesTest] = loadData('test',cfg);
+[testFeatures,testDepths,testLabels,indFilesTest] = ...
+    loadData('test',cfg);
 
 % normalize the training features to the [-1 1] range
 [trainFeatures,offset,scale] = normalizeFeatures(trainFeatures);
 % normalize the test features using the same offset and scale
 testFeatures = normalizeFeatures(testFeatures,offset,scale);
 
+% add a constant column for bias
+trainFeatures = [trainFeatures ones(length(trainLabels),1)];
+testFeatures = [testFeatures ones(length(testLabels),1)];
+
 % return;
+
+regression = true;
 modelType = 'calibrated ls';
+
 % train the supervised learning model
-model = trainModel(trainFeatures,trainLabels,modelType);
-
-% predict and evaluate accuracy on the training set
-predictedTrain = predictModel(trainFeatures,trainLabels,model,modelType);
-% predict and evaluate accuracy on the test set
-predictedTest = predictModel(testFeatures,testLabels,model,modelType);
-
-% plot confusion matrices for performance on training and test sets
-plotConfusionMatrix(trainLabels,predictedTrain,cfg.nClasses);
-figure; plotConfusionMatrix(testLabels,predictedTest,cfg.nClasses);
+if regression
+    [model,predTrainDepths,predTestDepths] = ...
+        regressionModel(trainFeatures,trainDepths,...
+        testFeatures,testDepths,modelType);
+else
+    [model,predTrainLabels,predTestLabels] = ...
+        classificationModel(trainFeatures,trainLabels,...
+        testFeatures,testLabels,modelType);
+%     convert labels to depths
+    predTrainDepths = cfg.classCenters(predTrainLabels)';
+    predTestDepths = cfg.classCenters(predTestLabels)';
+%     plot confusion matrices
+    plotConfusionMatrix(trainLabels,predTrainLabels,cfg.nClasses);
+    figure; plotConfusionMatrix(testLabels,predTestLabels,cfg.nClasses);
+end
 
 % plot example image, ground truth, labels, and prediction
-plotComparison(predictedTrain,indFilesTrain,'training',cfg);
-plotComparison(predictedTest,indFilesTest,'test',cfg);
+plotComparison(predTrainDepths,indFilesTrain,'training',cfg);
+plotComparison(predTestDepths,indFilesTest,'test',cfg);
+
+% Bipin performance metrics
+depthErrorTrain = mean(abs(log(trainDepths)-log(predTrainDepths)))
+relativeDepthErrorTrain = mean(abs((trainDepths-predTrainDepths)./trainDepths))
+depthErrorTest = mean(abs(log(testDepths)-log(predTestDepths)))
+relativeDepthErrorTest = mean(abs((testDepths-predTestDepths)./testDepths))

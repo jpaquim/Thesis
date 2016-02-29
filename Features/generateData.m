@@ -1,9 +1,9 @@
-function [features,labels,indFiles] = generateData(type,cfg)
+function [features,depths,labels,indFiles] = generateData(type,cfg)
 %GENERATEDATA Summary of this function goes here
 %   Detailed explanation goes here
 
 % load the file paths of both image and depth files
-nFiles = 10; % for testing purposes
+nFiles = 5; % for testing purposes
 [imgFiles,depthFiles,indFiles] = dataFilePaths(type,nFiles,true);
 nFiles = length(imgFiles);
 
@@ -21,9 +21,10 @@ nFeaturesSax = 2*cfg.nScales*length(channels);
 nFeaturesTxt = cfg.nTextons;
 nFeatures = nFeaturesSax+nFeaturesTxt;
 features = zeros(nInstances,nFeatures);
+depths = zeros(nInstances,1);
 labels = zeros(nInstances,1);
 for i = 1:nFiles
-    fprintf('File: %d\n',i);
+    fprintf('File: %d/%d\n',i,nFiles);
 %     read image from file, and extract the features
     imgRGB = imread(imgFiles{i});
     ind = (1:cfg.nPatches)+(i-1)*cfg.nPatches;
@@ -31,8 +32,9 @@ for i = 1:nFiles
     
 %     load and label the depth data into discrete classes
     load(depthFiles{i});
-    depths = Position3DGrid(:,:,4); %#ok<NODEF>
+    depthsMat = Position3DGrid(:,:,4); %#ok<NODEF>
     ind = (1:cfg.nPatches)+(i-1)*cfg.nPatches;
-    labels(ind) = labelDepths(depths(:),cfg);
+    depths(ind) = depthsMat(:);
+    labels(ind) = labelDepths(depths(ind),cfg.classEdges);
 end
 end
