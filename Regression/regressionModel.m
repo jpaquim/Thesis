@@ -1,13 +1,16 @@
-function [model,predictedTrain,predictedTest] = regressionModel(...
+function [model,predTrainDepths,predTestDepths] = regressionModel(...
     trainFeatures,trainDepths,testFeatures,testDepths,modelType)
 %REGRESSIONMODEL Summary of this function goes here
 %   Detailed explanation goes here
 
+trainDepths = log(trainDepths);
+% testDepths = log(testDepths);
+
 disp('Starting training'); tic
 switch modelType
     case 'calibrated ls'
-        lambda = 1;
-        [model,predictedTrain,predictedTest] = ...
+        lambda = 10;
+        [model,predTrainDepths,predTestDepths] = ...
             regressionCLS(trainFeatures,trainDepths,lambda,...
             testFeatures);
 %     case 'decision tree'
@@ -16,4 +19,8 @@ switch modelType
 %         predictedTest = predict(model,testFeatures);
 end
 toc; disp('Model trained');
+
+predTrainDepths = exp(predTrainDepths);
+predTestDepths = exp(predTestDepths);
+
 end
