@@ -34,7 +34,7 @@ linSize = cfg.txtHeight*cfg.txtWidth*nChannels;
 textons = zeros(linSize,cfg.nTextons);
 % textons = 255*rand(linSize,cfg.nTextons);
 for i = 1:nFiles
-    fprintf('File: %d\n',i);
+    fprintf('File: %d/%d\n',i,nFiles);
     img = double(rgb2ycbcr(imread(imgFiles{i})));
 
 %     train a Kohonen self-organizing map for texture clustering

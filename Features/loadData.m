@@ -1,4 +1,4 @@
-function [features,labels,indFiles] = loadData(type,cfg)
+function [features,depths,labels,indFiles] = loadData(type,cfg)
 %LOADDATA Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -15,6 +15,6 @@ if exist(fileName,'file') % if the data file already exists
     end
 end
 % if the data file doesn't exist, or cfg has changed, regenerate the data
-[features,labels,indFiles] = generateData(type,cfg);
-save(fileName,'features','labels','indFiles','cfg');
+[features,depths,labels,indFiles] = generateData(type,cfg);
+save(fileName,'features','depths','labels','indFiles','cfg');
 end
