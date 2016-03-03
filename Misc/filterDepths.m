@@ -7,7 +7,7 @@ depthsFilt = zeros(size(depthsStack));
 switch filterType
     case 'median'
         for i = 1:size(depthsStack,3);
-            depthsFilt(:,:,i) = medfilt2(depthsStack(:,:,i));
+            depthsFilt(:,:,i) = medfilt2(depthsStack(:,:,i),'symmetric');
         end
     case 'gaussian'
         hSize = 10;
