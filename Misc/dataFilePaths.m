@@ -1,17 +1,17 @@
 function [imgFiles,depthFiles,indFiles] = ...
-    dataFilePaths(type,indFiles,shuffle)
+    dataFilePaths(dataType,indFiles,shuffle)
 %DATAFILEPATHS Summary of this function goes here
 %   Detailed explanation goes here
 
 folderPrefix = './data/';
-if strcmp(type,'training')
+if strcmp(dataType,'training')
     imgFolder = 'Train400Img/';
     depthFolder = 'Train400Depth/';
-elseif strcmp(type,'test')
+elseif strcmp(dataType,'test')
     imgFolder = 'Test134Img/';
     depthFolder = 'Test134Depth/';
 else
-    error(['Invalid data type requested: ' type]);
+    error(['Invalid data type requested: ' dataType]);
 end
 imgFolder = [folderPrefix imgFolder];
 depthFolder = [folderPrefix depthFolder];

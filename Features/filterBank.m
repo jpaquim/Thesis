@@ -1,9 +1,9 @@
-function [filters,channels] = filterBank()
+function [filters,channels] = filterBank(cfg)
 %FILTERBANK Summary of this function goes here
 %   Detailed explanation goes here
 
 % Laws' masks (3x3, from Davies)
-L3 = [1 2 1]/128/0.2; % normalization from Saxena et al's code
+L3 = [1 2 1];
 E3 = [-1 0 1];
 S3 = [-1 2 -1];
 filtLaws = cell(1,9);

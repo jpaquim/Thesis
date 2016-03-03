@@ -1,7 +1,7 @@
 function [edges,centers] = depthIntervals(cfg)
 %DEPTHINTERVALS Summary of this function goes here
 %   Detailed explanation goes here
-persistent optEdges;
+persistent optEdges optCenters;
 switch cfg.classType
     case 'lin'
         edges = linspace(cfg.minDepth,cfg.maxDepth,cfg.nClasses+1);
@@ -9,14 +9,13 @@ switch cfg.classType
     case 'log'
         edges = logspace(log10(cfg.minDepth),...
                          log10(cfg.maxDepth),cfg.nClasses+1);
-        centers = 10.^(mean([log10(edges(1:end-1));
-                             log10(edges(2:end))]));
+        centers = exp(mean([log(edges(1:end-1));log(edges(2:end))]));
     case 'opt'
         if isempty(optEdges)
-            optEdges = optimalIntervals(cfg);
+            [optEdges,optCenters] = optimalIntervals(cfg);
         end
         edges = optEdges;
-        centers = mean([edges(1:end-1);edges(2:end)]);
+        centers = optCenters;
     otherwise
         error('Unknown class type: %s',cfg.classType);
 end
