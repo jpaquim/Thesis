@@ -4,8 +4,8 @@ function textons = generateDictionary(cfg)
 
 rng(0); % seed random number generator for consistent performance in tests
 
-nFiles = 'all';
-imgFiles = dataFilePaths('training',nFiles,true); % load shuffled image files
+nFiles = 'all'; % load the training image set, shuffled
+imgFiles = dataFilePaths('training',nFiles,true);
 nFiles = length(imgFiles);
 
 % maximum possible position of a texture's upper left corner

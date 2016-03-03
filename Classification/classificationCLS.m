@@ -8,9 +8,13 @@ function [model,YHatTrain,YHatTest] = ...
 YTrain = convertToBinClasses(YTrainCat,10);
 [n,d] = size(XTrain);
 k = size(YTrain,2);
-% use the Cholesky decomposition for more efficient least squares
-% regularize X'*X with the diagonal term, why the sqrt(n)?
-cholLowerX = chol((XTrain'*XTrain)+lambda*sqrt(n)*eye(d),'lower');
+if isscalar(lambda)
+    regularizer = sqrt(n)*lambda*eye(d);
+else
+    regularizer = sqrt(n)*lambda;
+end
+% use the Cholesky decomposition for efficient least squares, regularized
+cholLowerX = chol(XTrain'*XTrain+regularizer,'lower');
 % initialize W with the least squares estimate
 W = cholLowerX'\(cholLowerX\(XTrain'*YTrain));
 YTildeTrain = XTrain*W;

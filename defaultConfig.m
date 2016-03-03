@@ -9,18 +9,16 @@ cfg.size = [imgInfo.Height imgInfo.Width];
 cfg.height = cfg.size(1);
 cfg.width = cfg.size(2);
 
-% number of rows and columns in the patch grid
-cfg.gridSize = [55 305];
-cfg.nRows = cfg.gridSize(1);
-cfg.nCols = cfg.gridSize(2);
+% number of rows and columns in the depth map and patch grid
+cfg.mapSize = [55 305];
+cfg.nRows = cfg.mapSize(1);
+cfg.nCols = cfg.mapSize(2);
 % total number of patches
 cfg.nPatches = cfg.nRows*cfg.nCols;
 % height and width of each patch in pixels
 cfg.ptcSize = [5 5];
 cfg.ptcHeight = cfg.ptcSize(1);
 cfg.ptcWidth = cfg.ptcSize(1);
-% number of size scales at which features are calculated
-cfg.nScales = 3;
 
 % minimum and maximum depths in the data set
 cfg.depthLimits = [0.9 82];
@@ -29,7 +27,7 @@ cfg.maxDepth = cfg.depthLimits(2);
 % number of classes used in the depth labeling
 cfg.nClasses = 10;
 % type of interval spacing, 'lin' for linear, 'log' for logarithmic,
-cfg.classType = 'opt'; % 'opt' for optimal, uniform distribution of classes
+cfg.classType = 'opt'; % 'opt' for optimal, uniform histogram over classes
 [cfg.classEdges,cfg.classCenters] = depthIntervals(cfg);
 
 % color or grayscale textons
@@ -42,4 +40,11 @@ cfg.txtWidth = cfg.txtSize(2);
 cfg.nTextons = 30;
 % number of texture samples extracted from each image
 cfg.nTextures = 10000; % if nTextures = 'all', extract all possible samples
+
+cfg.featureTypes = {'FiltersL1','FiltersL2','FiltersL4',...
+                    'Textons','XYCoordinates'};
+cfg.filterTypes = {'LawsMasks','CbCrLocalAverage','OrientedEdgeDetectors'};
+% number of size scales at which features are calculated
+cfg.nScales = 3;
+
 end

@@ -1,15 +1,13 @@
 function [model,predTrainDepths,predTestDepths] = regressionModel(...
-    trainFeatures,trainDepths,testFeatures,testDepths,modelType)
+    trainFeatures,trainDepths,testFeatures,modelType)
 %REGRESSIONMODEL Summary of this function goes here
 %   Detailed explanation goes here
 
-trainDepths = log(trainDepths);
-% testDepths = log(testDepths);
-
+trainDepths = log(trainDepths); % regression in logspace
 disp('Starting training'); tic
 switch modelType
     case 'calibrated ls'
-        lambda = 10;
+        lambda = 50; % TODO: implement per-feature regularization
         [model,predTrainDepths,predTestDepths] = ...
             regressionCLS(trainFeatures,trainDepths,lambda,...
             testFeatures);
@@ -19,8 +17,6 @@ switch modelType
 %         predictedTest = predict(model,testFeatures);
 end
 toc; disp('Model trained');
-
-predTrainDepths = exp(predTrainDepths);
+predTrainDepths = exp(predTrainDepths); % convert back to linear space
 predTestDepths = exp(predTestDepths);
-
 end
