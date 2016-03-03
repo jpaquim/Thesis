@@ -17,6 +17,8 @@ plotComparison(predDepths,indFiles,dataType,cfg);
 performanceMetrics(predDepths,depths,dataType);
 % filter depths
 predDepthsFilt = filterDepths(predDepths,cfg.mapSize,'median');
+% saturate to minimum and maximum
+predDepthsFilt = min(max(predDepthsFilt,cfg.minDepth),cfg.maxDepth);
 % plot example image, ground truth, labels, and prediction after filtering
 plotComparison(predDepthsFilt,indFiles,dataType,cfg);
 % performance metrics after filtering
