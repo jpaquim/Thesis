@@ -12,6 +12,8 @@ elseif nDims == 1 % returns all images, limited to a single column
     nTotalPatches = length(patchData);
     ind = 1:nTotalPatches;
     nDims = nTotalPatches/nPatches;
+else
+    error('Input should be a column vector, if no file specified');
 end
 % the returned stack consists of different channels of the same image, or
 % the different images for a single channel

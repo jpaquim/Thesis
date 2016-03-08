@@ -41,10 +41,34 @@ cfg.nTextons = 30;
 % number of texture samples extracted from each image
 cfg.nTextures = 10000; % if nTextures = 'all', extract all possible samples
 
-cfg.featureTypes = {'FiltersL1','FiltersL2','FiltersL4',...
-                    'Textons','XYCoordinates'};
+cfg.nHOGBins = 9;
+cfg.nRadonAngles = 15;
+cfg.nStructBins = 15;
+
+% possible feature types: Coordinates, FiltersL1, FiltersL2, FiltersL4,
+% HOG, Textons, Radon, StructTensor
+possibleFeatures = {'Coordinates','Filters','HOG','Textons','Radon',...
+                    'StructTensor'};
+cfg.featureTypes = {'Coordinates','Filters','Textons','HOG','Radon'};
+% boolean vector indicating features used
+cfg.useFeatures = ismember(possibleFeatures,cfg.featureTypes);
+
+% possible filter types: LawsMasks, CbCrLocalAverage, OrientedEdgeDetectors
+possibleFilters = {'LawsMasks','CbCrLocalAverage','OrientedEdgeDetectors'};
 cfg.filterTypes = {'LawsMasks','CbCrLocalAverage','OrientedEdgeDetectors'};
+% boolean vector indicating filters used
+cfg.useFilters = ismember(possibleFilters,cfg.filterTypes);
+% dimensions of each filter group, in the above order
+filterDims = [9;2;6];
+% total number of filters
+cfg.nFilters = dot(filterDims,cfg.useFilters);
+
 % number of size scales at which features are calculated
 cfg.nScales = 3;
+% dimensions of each feature group, in the above order
+featureDims = [2;2*cfg.nFilters*cfg.nScales;cfg.nHOGBins;cfg.nTextons;...
+               2*cfg.nRadonAngles;cfg.nStructBins];
+% total number of features
+cfg.nFeatures = dot(featureDims,cfg.useFeatures);
 
 end
