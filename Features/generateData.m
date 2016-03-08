@@ -8,7 +8,7 @@ nFiles = 5; % for testing purposes
 nFiles = length(imgFiles);
 
 % load the various filters to be applied to the images
-[filters,channels] = filterBank(cfg);
+[filters,channels] = filterBank(cfg.useFilters);
 
 % load the texton dictionary
 textons = loadDictionary(cfg);
@@ -17,12 +17,7 @@ textons = loadDictionary(cfg);
 cfg = computeAuxVars(cfg);
 
 nInstances = nFiles*cfg.nPatches; % number of training/test instances
-nFeaturesFlt = 2*cfg.nScales*length(channels);
-nFeaturesTxt = cfg.nTextons;
-nFeaturesHOG = 9;
-nFeaturesPos = 2;
-nFeatures = nFeaturesFlt+nFeaturesTxt+nFeaturesHOG+nFeaturesPos;
-features = zeros(nInstances,nFeatures);
+features = zeros(nInstances,cfg.nFeatures);
 depths = zeros(nInstances,1);
 labels = zeros(nInstances,1);
 for i = 1:nFiles

@@ -43,7 +43,6 @@ for scl = 1:cfg.nScales
     end
 end
 
-cfg.nHOGBins = 9;
 % structure of vector returned by the extractHOGFeatures function
 %  1   3  N+1 N+3 ...
 %  2   4  N+2 N+4 ...
