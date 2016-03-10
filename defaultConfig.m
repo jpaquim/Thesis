@@ -18,7 +18,7 @@ cfg.nPatches = cfg.nRows*cfg.nCols;
 % height and width of each patch in pixels
 cfg.ptcSize = [5 5];
 cfg.ptcHeight = cfg.ptcSize(1);
-cfg.ptcWidth = cfg.ptcSize(1);
+cfg.ptcWidth = cfg.ptcSize(2);
 
 % minimum and maximum depths in the data set
 cfg.depthLimits = [0.9 82];
@@ -49,7 +49,7 @@ cfg.nStructBins = 15;
 % HOG, Textons, Radon, StructTensor
 possibleFeatures = {'Coordinates','Filters','HOG','Textons','Radon',...
                     'StructTensor'};
-cfg.featureTypes = {'Coordinates','Filters','Textons','HOG','Radon'};
+cfg.featureTypes = {'Filters','Textons','HOG','Radon'};
 % boolean vector indicating features used
 cfg.useFeatures = ismember(possibleFeatures,cfg.featureTypes);
 
@@ -63,8 +63,8 @@ filterDims = [9;2;6];
 % total number of filters
 cfg.nFilters = dot(filterDims,cfg.useFilters);
 
-% number of size scales at which features are calculated
-cfg.nScales = 3;
+% number of size scales at which filter features are calculated
+cfg.nScales = 2;
 % dimensions of each feature group, in the above order
 featureDims = [2;2*cfg.nFilters*cfg.nScales;cfg.nHOGBins;cfg.nTextons;...
                2*cfg.nRadonAngles;cfg.nStructBins];

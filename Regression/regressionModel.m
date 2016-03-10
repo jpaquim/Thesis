@@ -1,5 +1,5 @@
 function [model,predTrainDepths,predTestDepths] = regressionModel(...
-    trainFeatures,trainDepths,testFeatures,modelType)
+    trainFeatures,trainDepths,testFeatures,modelType,lambda)
 %REGRESSIONMODEL Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -7,7 +7,9 @@ trainDepths = log(trainDepths); % regression in logspace
 disp('Starting training'); tic
 switch modelType
     case 'calibrated ls'
-        lambda = 50; % TODO: implement per-feature regularization
+        if ~exist('lambda','var')
+            lambda = 1;
+        end
         [model,predTrainDepths,predTestDepths] = ...
             regressionCLS(trainFeatures,trainDepths,lambda,...
             testFeatures);

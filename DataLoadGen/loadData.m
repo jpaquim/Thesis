@@ -15,6 +15,15 @@ if exist(fileName,'file') % if the data file already exists
     end
 end
 % if the data file doesn't exist, or cfg has changed, regenerate the data
-[features,depths,labels,indFiles] = generateData(dataType,cfg);
+if strcmp(dataType,'training') % for testing purposes
+    nFiles = 100; % all
+else
+    nFiles = 20; % all
+end
+[imgFiles,depthFiles,indFiles] = dataFilePaths(dataType,nFiles,true);
+features = generateFeaturesData(imgFiles,cfg);
+depths = generateDepthsData(depthFiles,cfg);
+% label the depth data into discrete classes
+labels = labelDepths(depths,cfg.classEdges);
 save(fileName,'features','depths','labels','indFiles','cfg');
 end
