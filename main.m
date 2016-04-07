@@ -6,6 +6,7 @@ addpath('./Classification');
 addpath('./Regression');
 addpath('./Post-Processing');
 addpath('./Optimization');
+addpath('./OnlineLearning');
 addpath('./Misc');
 
 if ~exist('cfg','var')

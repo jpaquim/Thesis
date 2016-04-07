@@ -3,16 +3,15 @@ function J = costFunctionParameters(parameterVec)
 %   Detailed explanation goes here
 
 cfg = defaultConfig();
-cfg = updateConfig(cfg,parameterVec);
+cfg = updateConfig(cfg,parameterVec)
 
-[trainFeatures,trainDepths,trainLabels] = ...
-    loadData('training',cfg);
+[trainFeatures,trainDepths,trainLabels] = loadData('training',cfg);
 trainFeatures = normalizeFeatures(trainFeatures);
 trainFeatures = [trainFeatures ones(length(trainLabels),1)];
 
 % partition the training data for validation using the holdout method
 [trainFeatures,testFeatures,trainDepths,testDepths] = ...
-    validationPartition(trainFeatures,trainDepths,proportion);
+    validationPartition(trainFeatures,trainDepths,0.7);
 
 outputType = 'regression';
 modelType = 'calibrated ls';
