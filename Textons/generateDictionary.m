@@ -58,9 +58,9 @@ for i = 1:nFiles
     end
 end
 
-for i = 1:cfg.nTextons
-    subplot(5,6,i);
-    txt = reshape(textons(:,i),cfg.txtHeight,cfg.txtWidth,nChannels);
-    imagesc(txt(:,:,:)); colormap gray;
-end
+% for i = 1:cfg.nTextons
+%     subplot(5,6,i);
+%     txt = reshape(textons(:,i),cfg.txtHeight,cfg.txtWidth,nChannels);
+%     imagesc(txt(:,:,:)); colormap gray;
+% end
 end

@@ -57,3 +57,5 @@ toolboxes/**/**
 other/**/**
 *.mat
 *.csv
+MondrianForest/build
+MondrianForest/lib

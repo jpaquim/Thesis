@@ -17,7 +17,7 @@ centerCols = centerCols(:);
 cfg.ptcCenters = [centerRows centerCols];
 
 txtHalfHeight = floor(cfg.txtHeight/2);
-txtHalfWidth = floor(cfg.txtWidth/2);
+txtHalfWidth  = floor(cfg.txtWidth/2);
 txtRowRange = -txtHalfHeight:txtHalfHeight;
 txtColRange = -txtHalfWidth:txtHalfWidth;
 
@@ -49,8 +49,8 @@ end
 %  5   7  N+5 N+7 ...
 %  6   8  N+6 N+8 ...
 % ... ... ... ...
-cfg.cellSize = cfg.ptcSize;
-% cfg.cellSize = [10 10];
+% cfg.cellSize = cfg.ptcSize;
+cfg.cellSize = [5 5];
 nHOGCols = floor(cfg.width/cfg.cellSize(1));
 nHOGRows = floor(cfg.height/cfg.cellSize(2));
 HOGSize = nHOGCols*nHOGRows;

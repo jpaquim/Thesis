@@ -39,7 +39,7 @@ cfg.txtWidth = cfg.txtSize(2);
 % number of textons learned
 cfg.nTextons = 30;
 % number of texture samples extracted from each image
-cfg.nTextures = 10000; % if nTextures = 'all', extract all possible samples
+cfg.nTextures = 1000; % if nTextures = 'all', extract all possible samples
 
 cfg.nHOGBins = 9;
 cfg.nRadonAngles = 15;
