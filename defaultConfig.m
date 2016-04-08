@@ -2,15 +2,19 @@ function cfg = defaultConfig()
 %DEFAULTCONFIG Summary of this function goes here
 %   Detailed explanation goes here
 
+cfg.dataSet = 'Make3D';
+
 % read image resolution from the first image in the training set
-imgInfo = imfinfo(dataFilePaths('training',1));
+[imgFile,depthFile] = dataFilePaths(['train' cfg.dataSet],1);
+imgInfo = imfinfo(imgFile);
 % image height and width in pixels
 cfg.size = [imgInfo.Height imgInfo.Width];
 cfg.height = cfg.size(1);
 cfg.width = cfg.size(2);
 
 % number of rows and columns in the depth map and patch grid
-cfg.mapSize = [55 305];
+load(depthFile);
+cfg.mapSize = size(depth);
 cfg.nRows = cfg.mapSize(1);
 cfg.nCols = cfg.mapSize(2);
 % total number of patches

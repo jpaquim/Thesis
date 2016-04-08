@@ -2,9 +2,9 @@ function [features,depths,labels,indFiles] = loadData(dataType,cfg)
 %LOADDATA Summary of this function goes here
 %   Detailed explanation goes here
 
-if strcmp(dataType,'training')
-    fileName = 'trainingData.mat';
-elseif strcmp(dataType,'test')
+if strncmp(dataType,'train',5)
+    fileName = 'trainData.mat';
+elseif strncmp(dataType,'test',4)
     fileName = 'testData.mat';
 end
 if exist(fileName,'file') % if the data file already exists

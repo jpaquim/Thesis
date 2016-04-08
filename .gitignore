@@ -52,10 +52,13 @@ Session.vim
 *~
 
 ### Don't sync data sets, toolboxes, other projects, and large data files
-data/**/**
+*.mat
+*.png
+*.jpg
+*.bmp
+*.dat
+*.avi
 toolboxes/**/**
 other/**/**
-*.mat
 *.csv
-MondrianForest/build
-MondrianForest/lib
+*.db

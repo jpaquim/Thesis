@@ -14,12 +14,15 @@ if ~exist('cfg','var')
     cfg = defaultConfig(); % load the default configuration
 end
 
+trainDataType = 'trainMake3D';
+testDataType = 'testMake3D';
+
 % load the training data set
 [trainFeatures,trainDepths,trainLabels,indFilesTrain] = ...
-    loadData('training',cfg);
+    loadData(trainDataType,cfg);
 % load the test data set
 [testFeatures,testDepths,testLabels,indFilesTest] = ...
-    loadData('test',cfg);
+    loadData(testDataType,cfg);
 
 % normalize the training features to the [-1 1] range
 [trainFeatures,offset,scale] = normalizeFeatures(trainFeatures);
@@ -41,6 +44,6 @@ else
 end
 % perform post-processing and analysis on the predicted results
 processResults(predTrain,trainDepths,trainLabels,...
-               indFilesTrain,'training',outputType,cfg);
+               indFilesTrain,trainDataType,outputType,cfg);
 processResults(predTest,testDepths,testLabels,...
-               indFilesTest,'test',outputType,cfg);
+               indFilesTest,testDataType,outputType,cfg);
