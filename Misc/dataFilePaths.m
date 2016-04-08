@@ -4,19 +4,21 @@ function [imgFiles,depthFiles,indFiles] = ...
 %   Detailed explanation goes here
 
 folderPrefix = './data/';
-if strcmp(dataType,'training')
-    imgFolder = 'Train400Img/';
-    depthFolder = 'Train400Depth/';
-elseif strcmp(dataType,'test')
-    imgFolder = 'Test134Img/';
-    depthFolder = 'Test134Depth/';
+if strncmp(dataType,'train',5)
+    dataSet = [dataType(6:end) '/'];
+    imgFolder = ['TrainImg' dataSet];
+    depthFolder = ['TrainDepth' dataSet];
+elseif strncmp(dataType,'test',4)
+    dataSet = [dataType(5:end) '/'];
+    imgFolder = ['TestImg' dataSet];
+    depthFolder = ['TestDepth' dataSet];
 else
     error(['Invalid data type requested: ' dataType]);
 end
 imgFolder = [folderPrefix imgFolder];
 depthFolder = [folderPrefix depthFolder];
 
-dirFiles = dir([imgFolder '*.jpg']);
+dirFiles = dir([imgFolder '*.png']);
 imgFiles = strcat(imgFolder,{dirFiles.name}');
 dirFiles = dir([depthFolder '*.mat']);
 depthFiles = strcat(depthFolder,{dirFiles.name}');

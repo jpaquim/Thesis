@@ -2,7 +2,7 @@ function [edges,centers] = optimalIntervals(cfg)
 %OPTIMALINTERVALS Summary of this function goes here
 %   Detailed explanation goes here
 
-[~,depthFiles] = dataFilePaths('training');
+[~,depthFiles] = dataFilePaths(['train' cfg.dataSet]);
 depths = sort(generateDepthsData(depthFiles,cfg));
 nInstances = size(depths,1);
 binSize = floor(nInstances/cfg.nClasses);
