@@ -9,20 +9,22 @@ addpath('./Optimization');
 addpath('./OnlineLearning');
 addpath('./Misc');
 
-if ~exist('cfg','var')
-% structure that contains the configuration of the image, patches, textons
-    cfg = defaultConfig(); % load the default configuration
-end
+trainDataset = 'Make3D';
+testDataset = 'NYU';
 
-trainDataType = 'trainMake3D';
-testDataType = 'testMake3D';
+% structure that contains the configuration of the image, patches, textons
+cfgTrain = defaultConfig(trainDataset);
+cfgTest = defaultConfig(testDataset);
+
+trainDataType = ['train' trainDataset];
+testDataType = ['test' testDataset];
 
 % load the training data set
 [trainFeatures,trainDepths,trainLabels,indFilesTrain] = ...
-    loadData(trainDataType,cfg);
+    loadData(trainDataType,cfgTrain);
 % load the test data set
 [testFeatures,testDepths,testLabels,indFilesTest] = ...
-    loadData(testDataType,cfg);
+    loadData(testDataType,cfgTest);
 
 % normalize the training features to the [-1 1] range
 [trainFeatures,offset,scale] = normalizeFeatures(trainFeatures);
@@ -44,6 +46,6 @@ else
 end
 % perform post-processing and analysis on the predicted results
 processResults(predTrain,trainDepths,trainLabels,...
-               indFilesTrain,trainDataType,outputType,cfg);
-processResults(predTest,testDepths,testLabels,...
-               indFilesTest,testDataType,outputType,cfg);
+               indFilesTrain,trainDataType,outputType,cfgTrain);
+% processResults(predTest,testDepths,testLabels,...
+%                indFilesTest,testDataType,outputType,cfgTest);
