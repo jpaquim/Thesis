@@ -1,11 +1,14 @@
-function cfg = defaultConfig()
+function cfg = defaultConfig(dataset)
 %DEFAULTCONFIG Summary of this function goes here
 %   Detailed explanation goes here
 
-cfg.dataSet = 'Make3D';
+if ~exist('dataset','var')
+    dataset = 'Make3D';
+end
+cfg.dataset = dataset;
 
 % read image resolution from the first image in the training set
-[imgFile,depthFile] = dataFilePaths(['train' cfg.dataSet],1);
+[imgFile,depthFile] = dataFilePaths(['train' cfg.dataset],1);
 imgInfo = imfinfo(imgFile);
 % image height and width in pixels
 cfg.size = [imgInfo.Height imgInfo.Width];
@@ -13,8 +16,9 @@ cfg.height = cfg.size(1);
 cfg.width = cfg.size(2);
 
 % number of rows and columns in the depth map and patch grid
-load(depthFile);
-cfg.mapSize = size(depth);
+% load(depthFile);
+% cfg.mapSize = size(depth);
+cfg.mapSize = [55 305];
 cfg.nRows = cfg.mapSize(1);
 cfg.nCols = cfg.mapSize(2);
 % total number of patches
@@ -25,7 +29,7 @@ cfg.ptcHeight = cfg.ptcSize(1);
 cfg.ptcWidth = cfg.ptcSize(2);
 
 % minimum and maximum depths in the data set
-cfg.depthLimits = [0.9 82];
+cfg.depthLimits = [0.9 82]; % TODO: switch to per-dataset settings
 cfg.minDepth = cfg.depthLimits(1);
 cfg.maxDepth = cfg.depthLimits(2);
 % number of classes used in the depth labeling
@@ -53,7 +57,7 @@ cfg.nStructBins = 15;
 % HOG, Textons, Radon, StructTensor
 possibleFeatures = {'Coordinates','Filters','HOG','Textons','Radon',...
                     'StructTensor'};
-cfg.featureTypes = {'Filters','Textons','HOG','Radon'};
+cfg.featureTypes = {'Filters','Textons'};
 % boolean vector indicating features used
 cfg.useFeatures = ismember(possibleFeatures,cfg.featureTypes);
 

@@ -20,13 +20,12 @@ if ~exist(imgPrefix,'file') || ~exist(depthPrefix,'file')
     mkdir(imgPrefix);
     mkdir(depthPrefix);
     for i = 1:nFiles
-        imgName = num2str(i,'%04d.png');
-        depthName = num2str(i,'%04d.mat');
+        fileName = num2str(i,'%04d');
         imageData = imread(imgFiles{i});
-        imwrite(imageData,[imgPrefix imgName]);
+        imwrite(imageData,[imgPrefix fileName '.png']);
         load(depthFiles{i});
         depth = Position3DGrid(:,:,4);
-        save([depthPrefix depthName],'depth');
+        save([depthPrefix fileName '.mat'],'depth');
     end
 end
 
@@ -50,20 +49,25 @@ if ~exist(imgPrefix,'file') || ~exist(depthPrefix,'file')
     mkdir(imgPrefix);
     mkdir(depthPrefix);
     for i = 1:nFiles
-        imgName = num2str(i,'%04d.png');
-        depthName = num2str(i,'%04d.mat');
+        fileName = num2str(i,'%04d');
         imageData = imread(imgFiles{i});
-        imwrite(imageData,[imgPrefix imgName]);
+        imwrite(imageData,[imgPrefix fileName '.png']);
         load(depthFiles{i});
         depth = Position3DGrid(:,:,4);
-        save([depthPrefix depthName],'depth');
+        save([depthPrefix fileName '.mat'],'depth');
     end
 end
 
 % KITTI
-imgPrefix = './data/TrainImgKITTI/';
-depthPrefix = './data/TrainDepthKITTI/';
-if ~exist(imgPrefix,'file') || ~exist(depthPrefix,'file')
+trainPortion = 0.7; % portion allocated to the training set
+imgTrainPrefix = './data/TrainImgKITTI/';
+depthTrainPrefix = './data/TrainDepthKITTI/';
+imgTestPrefix = './data/TestImgKITTI/';
+depthTestPrefix = './data/TestDepthKITTI/';
+nTrain = 0;
+nTest = 0;
+if ~exist(imgTrainPrefix,'file') || ~exist(depthTrainPrefix,'file') || ...
+   ~exist(imgTestPrefix,'file') || ~exist(depthTestPrefix,'file')
     folderPrefix = './data/KITTI/training/';
     imgFolder = 'image_2/'; % left camera images
     depthFolder = 'disp_occ_0/';
@@ -77,27 +81,55 @@ if ~exist(imgPrefix,'file') || ~exist(depthPrefix,'file')
     if nFiles ~= length(depthFiles) % basic error checking
         error('Unbalanced image and depth data');
     end
-    mkdir(imgPrefix);
-    mkdir(depthPrefix);
+    mkdir(imgTrainPrefix);
+    mkdir(depthTrainPrefix);
+    mkdir(imgTestPrefix);
+    mkdir(depthTestPrefix);
     for i = 1:nFiles
-        imgName = num2str(i,'%04d.png');
-        depthName = num2str(i,'%04d.mat');
-        copyfile(imgFiles{i},[imgPrefix imgName]);
+        if rand() < trainPortion
+            imgPrefix = imgTrainPrefix;
+            depthPrefix = depthTrainPrefix;
+            nTrain = nTrain+1;
+            n = nTrain;
+        else
+            imgPrefix = imgTestPrefix;
+            depthPrefix = depthTestPrefix;
+            nTest = nTest+1;
+            n = nTest;
+        end
+        fileName = num2str(n,'%04d');
+        copyfile(imgFiles{i},[imgPrefix fileName '.png']);
         depth = imread(depthFiles{i});
-        save([depthPrefix depthName],'depth');
+        save([depthPrefix fileName '.mat'],'depth');
     end
 end
 
 % NYU Depth V2
-imgPrefix = './data/TrainImgNYU/';
-depthPrefix = './data/TrainDepthNYU/';
-if ~exist(imgPrefix,'file') || ~exist(depthPrefix,'file')
-    mkdir(imgPrefix);
-    mkdir(depthPrefix);
+imgTrainPrefix = './data/TrainImgNYU/';
+depthTrainPrefix = './data/TrainDepthNYU/';
+imgTestPrefix = './data/TestImgNYU/';
+depthTestPrefix = './data/TestDepthNYU/';
+if ~exist(imgTrainPrefix,'file') || ~exist(depthTrainPrefix,'file') || ...
+   ~exist(imgTestPrefix,'file') || ~exist(depthTestPrefix,'file')
+    mkdir(imgTrainPrefix);
+    mkdir(depthTrainPrefix);
+    mkdir(imgTestPrefix);
+    mkdir(depthTestPrefix);
     load('./data/NYUDepthV2/nyu_depth_v2_labeled.mat');
     nFiles = size(images,4);
     for i = 1:nFiles
-        fileName = num2str(i,'%04d');
+        if rand() < trainPortion
+            imgPrefix = imgTrainPrefix;
+            depthPrefix = depthTrainPrefix;
+            nTrain = nTrain+1;
+            n = nTrain;
+        else
+            imgPrefix = imgTestPrefix;
+            depthPrefix = depthTestPrefix;
+            nTest = nTest+1;
+            n = nTest;
+        end
+        fileName = num2str(n,'%04d');
         imwrite(images(:,:,:,i),[imgPrefix fileName '.png']);
         depth = depths(:,:,i);
         save([depthPrefix fileName '.mat'],'depth');
@@ -108,4 +140,4 @@ end
 
 
 
-% clear;
+clear;

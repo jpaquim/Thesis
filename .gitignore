@@ -58,7 +58,9 @@ Session.vim
 *.bmp
 *.dat
 *.avi
+*.m4v
 toolboxes/**/**
 other/**/**
 *.csv
 *.db
+

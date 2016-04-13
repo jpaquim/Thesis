@@ -11,7 +11,7 @@ labels = labelDepths(depth,cfg.classEdges);
 predDepths = patchesToImages(predDepths,cfg.mapSize,ind);
 figure;
 subplot(2,2,1); image(imread(imgFile)); title('Image');
-subplot(2,2,2); image(depth);          title('Depths');
+subplot(2,2,2); imagesc(depth);          title('Depths');
 subplot(2,2,3); imagesc(labels);        title('Depth classes');
-subplot(2,2,4); image(predDepths);      title('Predicted depths');
+subplot(2,2,4); imagesc(predDepths);      title('Predicted depths');
 end

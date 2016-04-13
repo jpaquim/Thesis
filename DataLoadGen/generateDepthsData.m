@@ -8,6 +8,7 @@ depths = zeros(nInstances,1);
 for i = 1:nFiles
     load(depthFiles{i});
     ind = (1:cfg.nPatches)+(i-1)*cfg.nPatches;
-    depths(ind) = depth;
+%     depths(ind) = depth;
+    depths(ind) = imresize(depth,cfg.mapSize);
 end
 end
