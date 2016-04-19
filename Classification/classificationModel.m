@@ -3,7 +3,7 @@ function [model,predictedTrain,predictedTest] = classificationModel(...
 %CLASSIFICATIONMODEL Summary of this function goes here
 %   Detailed explanation goes here
 
-disp('Starting training'); tic
+disp('Started training'); tic
 switch modelType
     case 'linear svm'
         addpath('./toolboxes/liblinear-2.1/matlab/');

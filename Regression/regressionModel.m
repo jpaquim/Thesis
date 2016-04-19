@@ -4,7 +4,7 @@ function [model,predTrainDepths,predTestDepths] = regressionModel(...
 %   Detailed explanation goes here
 
 trainDepths = log(trainDepths); % regression in logspace
-disp('Starting training'); tic
+disp('Started training'); tic
 switch modelType
     case 'calibrated ls'
         if ~exist('lambda','var')

@@ -1,22 +1,12 @@
 function [imgFiles,depthFiles,indFiles] = ...
-    dataFilePaths(dataType,indFiles,shuffle)
+    dataFilePaths(dataset,indFiles,shuffle)
 %DATAFILEPATHS Summary of this function goes here
 %   Detailed explanation goes here
 
 folderPrefix = './data/';
-if strncmp(dataType,'train',5)
-    dataSet = [dataType(6:end) '/'];
-    imgFolder = ['TrainImg' dataSet];
-    depthFolder = ['TrainDepth' dataSet];
-elseif strncmp(dataType,'test',4)
-    dataSet = [dataType(5:end) '/'];
-    imgFolder = ['TestImg' dataSet];
-    depthFolder = ['TestDepth' dataSet];
-else
-    error(['Invalid data type requested: ' dataType]);
-end
-imgFolder = [folderPrefix imgFolder];
-depthFolder = [folderPrefix depthFolder];
+
+imgFolder = [folderPrefix dataset 'Img/'];
+depthFolder = [folderPrefix dataset 'Depth/'];
 
 dirFiles = dir([imgFolder '*.png']);
 imgFiles = strcat(imgFolder,{dirFiles.name}');

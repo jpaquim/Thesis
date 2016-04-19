@@ -2,13 +2,8 @@ function cfg = defaultConfig(dataset)
 %DEFAULTCONFIG Summary of this function goes here
 %   Detailed explanation goes here
 
-if ~exist('dataset','var')
-    dataset = 'Make3D';
-end
-cfg.dataset = dataset;
-
 % read image resolution from the first image in the training set
-[imgFile,depthFile] = dataFilePaths(['train' cfg.dataset],1);
+[imgFile,depthFile] = dataFilePaths(dataset,1);
 imgInfo = imfinfo(imgFile);
 % image height and width in pixels
 cfg.size = [imgInfo.Height imgInfo.Width];
@@ -27,16 +22,6 @@ cfg.nPatches = cfg.nRows*cfg.nCols;
 cfg.ptcSize = [5 5];
 cfg.ptcHeight = cfg.ptcSize(1);
 cfg.ptcWidth = cfg.ptcSize(2);
-
-% minimum and maximum depths in the data set
-cfg.depthLimits = [0.9 82]; % TODO: switch to per-dataset settings
-cfg.minDepth = cfg.depthLimits(1);
-cfg.maxDepth = cfg.depthLimits(2);
-% number of classes used in the depth labeling
-cfg.nClasses = 10;
-% type of interval spacing, 'lin' for linear, 'log' for logarithmic,
-cfg.classType = 'opt'; % 'opt' for optimal, uniform histogram over classes
-[cfg.classEdges,cfg.classCenters] = depthIntervals(cfg);
 
 % color or grayscale textons
 cfg.txtColor = false;

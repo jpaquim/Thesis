@@ -53,6 +53,7 @@ Session.vim
 
 ### Don't sync data sets, toolboxes, other projects, and large data files
 *.mat
+*.fig
 *.png
 *.jpg
 *.bmp
