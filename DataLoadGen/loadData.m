@@ -1,25 +1,21 @@
-function [features,depths,labels,indFiles] = loadData(dataType,cfg)
+function [features,depths,indFiles] = loadData(dataset,cfg)
 %LOADDATA Summary of this function goes here
 %   Detailed explanation goes here
 
-fileName = [dataType 'Data.mat'];
-if exist(fileName,'file') % if the data file already exists
-    fileVars = load(fileName,'cfg');
+filename = [dataset '.mat'];
+if exist(filename,'file') % if the data file already exists
+    fileVars = load(filename,'cfg');
     if isequal(fileVars.cfg,cfg) % and if cfg is the same
-        load(fileName); % load the data directly from it
+        load(filename); % load the data directly from it
+        fprintf('Loaded the %s dataset\n',dataset);
         return;
     end
 end
 % if the data file doesn't exist, or cfg has changed, regenerate the data
-if strncmp(dataType,'train',5) % for testing purposes
-    nFiles = 50; % all
-else
-    nFiles = 10; % all
-end
-[imgFiles,depthFiles,indFiles] = dataFilePaths(dataType,nFiles,true);
+nFiles = 20; % for testing purposes
+[imgFiles,depthFiles,indFiles] = dataFilePaths(dataset,nFiles,true);
+fprintf('Generating features for the %s dataset\n',dataset);
 features = generateFeaturesData(imgFiles,cfg);
 depths = generateDepthsData(depthFiles,cfg);
-% label the depth data into discrete classes
-labels = labelDepths(depths,cfg.classEdges);
-save(fileName,'features','depths','labels','indFiles','cfg');
+save(filename,'features','depths','indFiles','cfg');
 end

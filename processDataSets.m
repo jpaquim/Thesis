@@ -1,143 +1,90 @@
 % converts the data sets to the same format, similar to Make3D
 
-% Make3D train
-imgPrefix = './data/TrainImgMake3D/';
-depthPrefix = './data/TrainDepthMake3D/';
-if ~exist(imgPrefix,'file') || ~exist(depthPrefix,'file')
-    folderPrefix = './data/Make3D/';
-    imgFolder = 'Train400Img/';
-    depthFolder = 'Train400Depth/';
-    imgFolder = [folderPrefix imgFolder];
-    depthFolder = [folderPrefix depthFolder];
-    dirFiles = dir([imgFolder '*.jpg']);
-    imgFiles = strcat(imgFolder,{dirFiles.name}');
-    dirFiles = dir([depthFolder '*.mat']);
-    depthFiles = strcat(depthFolder,{dirFiles.name}');
-    nFiles = length(imgFiles);
-    if nFiles ~= length(depthFiles) % basic error checking
-        error('Unbalanced image and depth data');
-    end
-    mkdir(imgPrefix);
-    mkdir(depthPrefix);
-    for i = 1:nFiles
-        fileName = num2str(i,'%04d');
-        imageData = imread(imgFiles{i});
-        imwrite(imageData,[imgPrefix fileName '.png']);
-        load(depthFiles{i});
-        depth = Position3DGrid(:,:,4);
-        save([depthPrefix fileName '.mat'],'depth');
+cd data
+
+% Make3D
+imgPrefix = {'TrainImgMake3D/','TestImgMake3D/'};
+depthPrefix = {'TrainDepthMake3D/','TestDepthMake3D/'};
+folderPrefix = 'Make3D/';
+imgFolders = strcat(folderPrefix,{'Train400Img/','Test134/'});
+depthFolders = strcat(folderPrefix,{'Train400Depth/','Gridlaserdata/'});
+for i = 1:2
+    if ~exist(imgPrefix{i},'file') || ~exist(depthPrefix{i},'file')
+        dirFiles = dir([imgFolders{i} '*.jpg']);
+        imgFiles = strcat(imgFolders{i},{dirFiles.name}');
+        dirFiles = dir([depthFolders{i} '*.mat']);
+        depthFiles = strcat(depthFolders{i},{dirFiles.name}');
+        nFiles = length(imgFiles);
+        if nFiles ~= length(depthFiles) % basic error checking
+            error('Unbalanced image and depth data');
+        end
+        mkdir(imgPrefix{i});
+        mkdir(depthPrefix{i});
+        for j = 1:nFiles
+            fileName = num2str(j,'%04d');
+            imageData = imread(imgFiles{j});
+            imwrite(imageData,[imgPrefix{i} fileName '.png']);
+            load(depthFiles{j});
+            depth = Position3DGrid(:,:,4);
+            save([depthPrefix{i} fileName '.mat'],'depth');
+        end
     end
 end
 
-% Make3D test
-imgPrefix = './data/TestImgMake3D/';
-depthPrefix = './data/TestDepthMake3D/';
-if ~exist(imgPrefix,'file') || ~exist(depthPrefix,'file')
-    folderPrefix = './data/Make3D/';
-    imgFolder = 'Test134/';
-    depthFolder = 'Gridlaserdata/';
-    imgFolder = [folderPrefix imgFolder];
-    depthFolder = [folderPrefix depthFolder];
-    dirFiles = dir([imgFolder '*.jpg']);
-    imgFiles = strcat(imgFolder,{dirFiles.name}');
-    dirFiles = dir([depthFolder '*.mat']);
-    depthFiles = strcat(depthFolder,{dirFiles.name}');
-    nFiles = length(imgFiles);
-    if nFiles ~= length(depthFiles) % basic error checking
-        error('Unbalanced image and depth data');
-    end
-    mkdir(imgPrefix);
-    mkdir(depthPrefix);
+% NYU Depth V2
+trainPortion = 0.7; % portion allocated to the training set
+imgPrefix = {'TrainImgNYU/','TestImgNYU/'};
+depthPrefix = {'TrainDepthNYU/','TestDepthNYU/'};
+if ~exist(imgPrefix{1},'file') || ~exist(depthPrefix{1},'file') || ...
+   ~exist(imgPrefix{2},'file') || ~exist(depthPrefix{2},'file')
+    mkdir(imgPrefix{1});
+    mkdir(imgPrefix{2});
+    mkdir(depthPrefix{1});
+    mkdir(depthPrefix{2});
+    load('NYUDepthV2/nyu_depth_v2_labeled.mat');
+    nFiles = size(images,4);
+    n = [0 0];
     for i = 1:nFiles
-        fileName = num2str(i,'%04d');
-        imageData = imread(imgFiles{i});
-        imwrite(imageData,[imgPrefix fileName '.png']);
-        load(depthFiles{i});
-        depth = Position3DGrid(:,:,4);
-        save([depthPrefix fileName '.mat'],'depth');
+        j = 1+(rand() > trainPortion); % 1 for training, 2 for test
+        n(j) = n(j)+1; % increment corresponding count
+        fileName = num2str(n(j),'%04d');
+        imwrite(images(:,:,:,i),[imgPrefix{j} fileName '.png']);
+        depth = depths(:,:,i);
+        save([depthPrefix{j} fileName '.mat'],'depth');
     end
 end
 
 % KITTI
 trainPortion = 0.7; % portion allocated to the training set
-imgTrainPrefix = './data/TrainImgKITTI/';
-depthTrainPrefix = './data/TrainDepthKITTI/';
-imgTestPrefix = './data/TestImgKITTI/';
-depthTestPrefix = './data/TestDepthKITTI/';
-nTrain = 0;
-nTest = 0;
-if ~exist(imgTrainPrefix,'file') || ~exist(depthTrainPrefix,'file') || ...
-   ~exist(imgTestPrefix,'file') || ~exist(depthTestPrefix,'file')
-    folderPrefix = './data/KITTI/training/';
-    imgFolder = 'image_2/'; % left camera images
-    depthFolder = 'disp_occ_0/';
-    imgFolder = [folderPrefix imgFolder];
-    depthFolder = [folderPrefix depthFolder];
+imgPrefix = {'TrainImgKITTI/','TestImgKITTI/'};
+dispPrefix = {'TrainDispKITTI/','TestDispKITTI/'};
+if ~exist(imgPrefix{1},'file') || ~exist(dispPrefix{1},'file') || ...
+   ~exist(imgPrefix{2},'file') || ~exist(dispPrefix{2},'file')
+    folderPrefix = 'KITTI/training/';
+    imgFolder = [folderPrefix 'image_2/']; % left camera images
+    dispFolder = [folderPrefix 'disp_occ_0/'];
     dirFiles = dir([imgFolder '*0.png']); % only the first of the image pairs
     imgFiles = strcat(imgFolder,{dirFiles.name}');
-    dirFiles = dir([depthFolder '*.png']);
-    depthFiles = strcat(depthFolder,{dirFiles.name}');
+    dirFiles = dir([dispFolder '*.png']);
+    dispFiles = strcat(dispFolder,{dirFiles.name}');
     nFiles = length(imgFiles);
-    if nFiles ~= length(depthFiles) % basic error checking
+    if nFiles ~= length(dispFiles) % basic error checking
         error('Unbalanced image and depth data');
     end
-    mkdir(imgTrainPrefix);
-    mkdir(depthTrainPrefix);
-    mkdir(imgTestPrefix);
-    mkdir(depthTestPrefix);
+    mkdir(imgPrefix{1});
+    mkdir(imgPrefix{2});
+    mkdir(dispPrefix{1});
+    mkdir(dispPrefix{2});
+    n = [0 0];
     for i = 1:nFiles
-        if rand() < trainPortion
-            imgPrefix = imgTrainPrefix;
-            depthPrefix = depthTrainPrefix;
-            nTrain = nTrain+1;
-            n = nTrain;
-        else
-            imgPrefix = imgTestPrefix;
-            depthPrefix = depthTestPrefix;
-            nTest = nTest+1;
-            n = nTest;
-        end
-        fileName = num2str(n,'%04d');
-        copyfile(imgFiles{i},[imgPrefix fileName '.png']);
-        depth = imread(depthFiles{i});
-        save([depthPrefix fileName '.mat'],'depth');
+        j = 1+(rand() > trainPortion); % 1 for training, 2 for test
+        n(j) = n(j)+1; % increment corresponding count
+        fileName = num2str(n(j),'%04d');
+        copyfile(imgFiles{i},[imgPrefix{j} fileName '.png']);
+        disps = double(imread(dispFiles{i}))./256.0;
+        save([dispPrefix{j} fileName '.mat'],'disps');
     end
 end
 
-% NYU Depth V2
-imgTrainPrefix = './data/TrainImgNYU/';
-depthTrainPrefix = './data/TrainDepthNYU/';
-imgTestPrefix = './data/TestImgNYU/';
-depthTestPrefix = './data/TestDepthNYU/';
-if ~exist(imgTrainPrefix,'file') || ~exist(depthTrainPrefix,'file') || ...
-   ~exist(imgTestPrefix,'file') || ~exist(depthTestPrefix,'file')
-    mkdir(imgTrainPrefix);
-    mkdir(depthTrainPrefix);
-    mkdir(imgTestPrefix);
-    mkdir(depthTestPrefix);
-    load('./data/NYUDepthV2/nyu_depth_v2_labeled.mat');
-    nFiles = size(images,4);
-    for i = 1:nFiles
-        if rand() < trainPortion
-            imgPrefix = imgTrainPrefix;
-            depthPrefix = depthTrainPrefix;
-            nTrain = nTrain+1;
-            n = nTrain;
-        else
-            imgPrefix = imgTestPrefix;
-            depthPrefix = depthTestPrefix;
-            nTest = nTest+1;
-            n = nTest;
-        end
-        fileName = num2str(n,'%04d');
-        imwrite(images(:,:,:,i),[imgPrefix fileName '.png']);
-        depth = depths(:,:,i);
-        save([depthPrefix fileName '.mat'],'depth');
-    end
-end
-
-% Stereo data sets
-
-
-
+cd ..;
 clear;

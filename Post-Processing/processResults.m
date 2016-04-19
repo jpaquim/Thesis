@@ -1,26 +1,22 @@
-function processResults(preds,depths,labels,indFiles,...
-                        dataType,outputType,cfg)
+function processResults(preds,depths,indFiles,dataset,cfg)
 %PROCESSRESULTS Summary of this function goes here
 %   Detailed explanation goes here
 
-if strcmp(outputType,'regression')
-    predDepths = preds;
-else
-%     plot confusion matrices
-    figure; plotConfusionMatrix(labels,preds,cfg.nClasses);
-%     convert labels to depths using the class centers
-    predDepths = cfg.classCenters(preds)';
+switch cfg.outputType
+    case 'regression'
+        predDepths = preds;
+    case 'classification'
+%         plot confusion matrix
+%         figure; plotConfusionMatrix(labels,preds,cfg.nClasses);
+%         convert labels to depths using the class centers
+        predDepths = cfg.classCenters(preds)';
 end
-% plot example image, ground truth, labels, and prediction
-plotComparison(predDepths,indFiles,dataType,cfg);
-% performance metrics
-performanceMetrics(predDepths,depths,dataType);
 % filter depths
-predDepthsFilt = filterDepths(predDepths,cfg.mapSize,'median');
-% saturate to minimum and maximum
-predDepthsFilt = min(max(predDepthsFilt,cfg.minDepth),cfg.maxDepth);
-% plot example image, ground truth, labels, and prediction after filtering
-plotComparison(predDepthsFilt,indFiles,dataType,cfg);
+predDepths = filterDepths(predDepths,cfg.mapSize,'median');
+% saturate to zero
+predDepths = max(predDepths,0);
+% plot example image, ground truth, labels, and prediction
+plotComparison(predDepths,depths,indFiles,dataset,cfg);
 % performance metrics after filtering
-performanceMetrics(predDepthsFilt,depths,dataType);
+performanceMetrics(predDepths,depths,dataset);
 end

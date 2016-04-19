@@ -47,9 +47,12 @@ if ~exist('win_size', 'var'), win_size = 9; end
 if ~exist('disp_scale', 'var'), disp_scale = floor(255/max_disp); end
 
 % Read original left and right images
-he_l = imread(im_left);
-he_r = imread(im_right);
-
+% he_l = imread(im_left);
+% he_r = imread(im_right);
+he_l = im_left;
+he_r = im_right;
+size(he_l)
+size(he_r)
 % Extract intensities (L) from original left and right images
 cform = makecform('srgb2lab');
 lab_he = applycform(he_l,cform);

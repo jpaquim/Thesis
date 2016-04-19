@@ -14,8 +14,8 @@ nInstances = nFiles*cfg.nPatches; % number of training/test instances
 features = zeros(nInstances,cfg.nFeatures);
 for i = 1:nFiles
     fprintf('File: %d/%d\n',i,nFiles);
-%     read image from file, and extract the features
-    img = imread(imgFiles{i});
+%     read image from file and resize it to the training data size
+    img = imresize(imread(imgFiles{i}),cfg.size);
     ind = (1:cfg.nPatches)+(i-1)*cfg.nPatches;
     features(ind,:) = extractImgFeatures(img,filters,channels,textons,cfg);
 end
