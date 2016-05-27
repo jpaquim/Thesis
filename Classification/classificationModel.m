@@ -13,7 +13,9 @@ switch modelType
     case 'logistic ls'
         model = logisticLeastSquares(trainFeatures,trainLabels);
     case 'calibrated ls'
-        lambda = 1;
+        if ~exist('lambda','var')
+            lambda = 1;
+        end
         [model,predictedTrain,predictedTest] = ...
             classificationCLS(trainFeatures,trainLabels,lambda,...
             testFeatures,testLabels);

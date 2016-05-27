@@ -2,8 +2,10 @@ function cfg = defaultConfig(dataset)
 %DEFAULTCONFIG Summary of this function goes here
 %   Detailed explanation goes here
 
+cfg.dataset = dataset;
+
 % read image resolution from the first image in the training set
-[imgFile,depthFile] = dataFilePaths(dataset,1);
+[imgFile,depthFile] = dataFilePaths(cfg.dataset,1);
 imgInfo = imfinfo(imgFile);
 % image height and width in pixels
 cfg.size = [imgInfo.Height imgInfo.Width];
@@ -13,7 +15,7 @@ cfg.width = cfg.size(2);
 % number of rows and columns in the depth map and patch grid
 % load(depthFile);
 % cfg.mapSize = size(depth);
-cfg.mapSize = [55 305];
+cfg.mapSize = [55 305]; % TODO: find a better resolution
 cfg.nRows = cfg.mapSize(1);
 cfg.nCols = cfg.mapSize(2);
 % total number of patches
@@ -32,7 +34,7 @@ cfg.txtWidth = cfg.txtSize(2);
 % number of textons learned
 cfg.nTextons = 30;
 % number of texture samples extracted from each image
-cfg.nTextures = 1000; % if nTextures = 'all', extract all possible samples
+cfg.nTextures = 100000; % if nTextures = 'all', extract all possible samples
 
 cfg.nHOGBins = 9;
 cfg.nRadonAngles = 15;
@@ -48,7 +50,8 @@ cfg.useFeatures = ismember(possibleFeatures,cfg.featureTypes);
 
 % possible filter types: LawsMasks, CbCrLocalAverage, OrientedEdgeDetectors
 possibleFilters = {'LawsMasks','CbCrLocalAverage','OrientedEdgeDetectors'};
-cfg.filterTypes = {'LawsMasks','CbCrLocalAverage','OrientedEdgeDetectors'};
+% cfg.filterTypes = {'LawsMasks','CbCrLocalAverage','OrientedEdgeDetectors'};
+cfg.filterTypes = {'LawsMasks','OrientedEdgeDetectors'};
 % boolean vector indicating filters used
 cfg.useFilters = ismember(possibleFilters,cfg.filterTypes);
 % dimensions of each filter group, in the above order

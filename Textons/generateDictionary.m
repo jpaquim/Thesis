@@ -5,7 +5,7 @@ function textons = generateDictionary(cfg)
 rng(0); % seed random number generator for consistent performance in tests
 
 nFiles = 'all'; % load the training image set, shuffled
-imgFiles = dataFilePaths('training',nFiles,true);
+imgFiles = dataFilePaths(cfg.dataset,nFiles,true);
 nFiles = length(imgFiles);
 
 % maximum possible position of a texture's upper left corner
@@ -33,6 +33,7 @@ linSize = cfg.txtHeight*cfg.txtWidth*nChannels;
 
 textons = zeros(linSize,cfg.nTextons);
 % textons = 255*rand(linSize,cfg.nTextons);
+disp('Generating textons');
 for i = 1:nFiles
     fprintf('File: %d/%d\n',i,nFiles);
     img = double(rgb2ycbcr(imread(imgFiles{i})));
