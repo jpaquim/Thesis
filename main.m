@@ -1,17 +1,19 @@
 % add the paths of the various modules
 addpath Textons
-addpath DataLoadGen
-addpath FeatureExtraction
+addpath Data-Handling
+addpath Feature-Extraction
 addpath Classification
 addpath Regression
 addpath Post-Processing
 addpath Optimization
-addpath OnlineLearning
-addpath StereoMatching
+addpath Online-Learning
+addpath Stereo-Matching
 addpath Misc
 
-trainDataset = 'NYUTrain';
-testDataset = 'NYUTest';
+trainDataset = 'CubicleTrain';
+testDataset = 'CubicleTest';
+% trainDataset = 'Make3DTrain';
+% testDataset = 'Make3DTest';
 
 % structure that contains the configuration of the image, patches, textons
 cfg = defaultConfig(trainDataset);
@@ -20,6 +22,15 @@ cfg = defaultConfig(trainDataset);
 [trainFeatures,trainDepths,indFilesTrain] = loadData(trainDataset,cfg);
 % load the test data set
 [testFeatures,testDepths,indFilesTest] = loadData(testDataset,cfg);
+
+% remove invalid depths/disparities
+% trainValidInd = find(trainDepths >= 0);
+% trainFeatures = trainFeatures(trainValidInd,:);
+% auxDepth = zeros(size(trainDepths));
+% trainDepths = trainDepths(trainValidInd);
+% testValidInd = find(testDepths >= 0);
+% testFeatures = testFeatures(testValidInd,:);
+% testDepths = testDepths(testValidInd);
 
 % normalize the training features to the [0 1] range
 [trainFeatures,offset,scale] = normalizeFeatures(trainFeatures);
@@ -50,9 +61,13 @@ switch cfg.outputType
 %         label the depth data into discrete classes
         trainLabels = labelDepths(trainDepths,cfg.classEdges);
         testLabels = labelDepths(testDepths,cfg.classEdges);
-        [model,predTrain,predTest] = classificationModel(trainFeatures,...
-            trainLabels,testFeatures,testLabels,modelType);
+        [model,predTrain,predTest] = classificationModel(...
+            trainFeatures,trainLabels,testFeatures,testLabels,modelType);
 end
+% auxDepth(trainValidInd,:) = predTrain;
+% predTrain = auxDepth;
+% auxDepth(trainValidInd,:) = trainDepths;
+% trainDepths = auxDepth;
 % perform post-processing and analysis on the predicted results
 processResults(predTrain,trainDepths,indFilesTrain,trainDataset,cfg);
 processResults(predTest,testDepths,indFilesTest,testDataset,cfg);

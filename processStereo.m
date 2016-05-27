@@ -11,7 +11,7 @@ if ~exist(imgFolderL,'file') || ~exist(imgFolderR,'file')
     imgHeight = vidHeight;
     imgWidth = vidWidth/2;
     i = 0;
-    j = 0;
+    j = 1;
     mkdir(imgFolderL)
     mkdir(imgFolderR)
     while hasFrame(vidObj)
@@ -19,30 +19,36 @@ if ~exist(imgFolderL,'file') || ~exist(imgFolderR,'file')
         if mod(i,10) == 0 % save one in every 10 frames
             imgL = cdata(:,1:imgWidth,:);
             imgR = cdata(:,imgWidth+1:end,:);
-            fileName = num2str(j,'%04d');
-            imwrite(imgL,[imgFolderL fileName '.png']);
-            imwrite(imgR,[imgFolderR fileName '.png']);
+            filename = num2str(j,'%04d');
+            imwrite(imgL,[imgFolderL filename '.png']);
+            imwrite(imgR,[imgFolderR filename '.png']);
             j = j+1;
         end
         i = i+1;
     end
 end
-addpath ../StereoMatching
-dispFolder = 'CubicleDispDense/';
-if ~exist(dispFolder,'file')
+addpath ../Stereo-Matching
+trainFolder = 'CubicleTrainDepth/';
+testFolder = 'CubicleTestDepth/';
+if ~exist(trainFolder,'file') || ~exist(testFolder,'file')
     dirFilesL = dir([imgFolderL '*.png']);
     imgFilesL = strcat(imgFolderL,{dirFilesL.name}');
     dirFilesR = dir([imgFolderR '*.png']);
     imgFilesR = strcat(imgFolderR,{dirFilesR.name}');
-    mkdir(dispFolder);
+    mkdir(trainFolder);
+    mkdir(testFolder);
     nFiles = length(imgFilesL);
     for i = 1:nFiles
         imgL = imread(imgFilesL{i});
         imgR = imread(imgFilesR{i});
-        disps = computeDisparity(imgL,imgR,'Dense');
-        disps = computeDisparity(imgL,imgR,'Sparse');
-        fileName = num2str(i,'%04d');
-        save([dispFolder fileName '.mat'],'disps');
+        filename = num2str(i,'%04d');
+        depth = computeDisparity(imgL,imgR,'Sparse');
+        save([trainFolder filename '.mat'],'depth');
+        depth = computeDisparity(imgL,imgR,'Dense');
+        save([testFolder filename '.mat'],'depth');
+%         dispDense = computeDisparity(imgL,imgR,'Dense');
+%         dispSparse = computeDisparity(imgL,imgR,'Sparse');
+%         save([dispFolder filename '.mat'],'dispDense','dispSparse');
     end
 end
 

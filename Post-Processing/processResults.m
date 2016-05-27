@@ -12,7 +12,7 @@ switch cfg.outputType
         predDepths = cfg.classCenters(preds)';
 end
 % filter depths
-predDepths = filterDepths(predDepths,cfg.mapSize,'median');
+% predDepths = filterDepths(predDepths,cfg.mapSize,'median');
 % saturate to zero
 predDepths = max(predDepths,0);
 % plot example image, ground truth, labels, and prediction
