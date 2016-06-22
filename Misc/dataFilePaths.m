@@ -1,18 +1,31 @@
 function [imgFiles,depthFiles,indFiles] = ...
     dataFilePaths(dataset,indFiles,shuffle)
-%DATAFILEPATHS Summary of this function goes here
-%   Detailed explanation goes here
+%DATAFILEPATHS Retuns lists of the image and depth file paths
+%   Given the dataset's name, this function will return the paths to the
+%   corresponding image and depth files. If indFiles is specified as a scalar,
+%   and shuffle is true, it will be interpreted as the number of files to return
+%   at random. If indFiles is a vector, it will be interpreted as the specific
+%   files to be returned (in a random order, if shuffle is true). If indFiles is
+%   the string 'all', every file will be returned (in a random order, if shuffle
+%   is true).
+%   
+%   The outputs imgFiles and depthFiles are strings or cell arrays of strings,
+%   indFiles is a vector containing the indices of the returned files, which
+%   describe their ordering within the containing folder.
 
 folderPrefix = './data/';
 
-imgFolder = [folderPrefix dataset 'Img/'];
-depthFolder = [folderPrefix dataset 'Depth/'];
+imgFolder = [folderPrefix dataset '-img/'];
+depthFolder = [folderPrefix dataset '-depth/'];
 
 dirFiles = dir([imgFolder '*.png']);
 imgFiles = strcat(imgFolder,{dirFiles.name}');
-dirFiles = dir([depthFolder '*.mat']);
+dirFiles = dir([depthFolder '*.png']);
 depthFiles = strcat(depthFolder,{dirFiles.name}');
 nFiles = length(imgFiles);
+if nFiles == 0
+    error(['Folder is empty: ' imgFolder]);
+end
 if nFiles ~= length(depthFiles) % basic error checking
     error('Unbalanced image and depth data');
 end

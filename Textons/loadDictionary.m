@@ -2,7 +2,7 @@ function textons = loadDictionary(cfg)
 %LOADDICTIONARY Summary of this function goes here
 %   Detailed explanation goes here
 
-filename = [cfg.dataset 'Dict.mat'];
+filename = [cfg.dataset '-dict.mat'];
 % if any of these elements change, the dictionary should be regenerated
 txtConfig = struct('txtSize',cfg.txtSize,'nTextons',cfg.nTextons,...
                    'nTextures',cfg.nTextures,'txtColor',cfg.txtColor);

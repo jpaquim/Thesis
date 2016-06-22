@@ -1,6 +1,12 @@
 function [edges,centers] = depthIntervals(depths,nClasses,classType)
-%DEPTHINTERVALS Summary of this function goes here
-%   Detailed explanation goes here
+%DEPTHINTERVALS Computes intervals for classification of continuous depths into
+%discrete depth classes
+%   Given the depth data to be discretized, the number of desired classes, and
+%   the specified class type, the function returns the most adequate edges and
+%   centers of the intervals corresponding to the discretization. Available
+%   class types are 'lin', for linear spacing, 'log', for logarithmic spacing,
+%   and 'opt', for optimal spacing based on the distribution of data, such that
+%   the resulting histogram is nearly uniform over the classes.
 
 % minimum and maximum depths in the data set
 minDepth = min(depths);

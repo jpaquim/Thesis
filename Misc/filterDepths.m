@@ -1,6 +1,8 @@
 function depthsFilt = filterDepths(depths,mapSize,filterType)
-%FILTERDEPTHS Summary of this function goes here
-%   Detailed explanation goes here
+%FILTERDEPTHS Filters depth data according to the specified filter
+%   Applies the filter given in filterType, which can be either 'median' or
+%   'gaussian' to the depth data given in the depths vector, where the actual
+%   depth maps are sized mapSize(1) by mapSize(2).
 
 depthsStack = patchesToImages(depths,mapSize);
 depthsFilt = zeros(size(depthsStack));

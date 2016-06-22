@@ -50,18 +50,23 @@ end
 %  6   8  N+6 N+8 ...
 % ... ... ... ...
 % cfg.cellSize = cfg.ptcSize;
-cfg.cellSize = [5 5];
-nHOGCols = floor(cfg.width/cfg.cellSize(1));
-nHOGRows = floor(cfg.height/cfg.cellSize(2));
-HOGSize = nHOGCols*nHOGRows;
-ind0 = 1:HOGSize;
-ind1 = sort([ind0(1:4:end);ind0(2:4:end)]);
-ind2 = sort([ind0(3:4:end);ind0(4:4:end)]);
-ind3(:,1:2:nHOGCols) = reshape(ind1,nHOGRows,[]);
-ind3(:,2:2:nHOGCols) = reshape(ind2,nHOGRows,[]);
-ind4 = repmat(ind3,1,1,cfg.nHOGBins);
-cfg.indHOG = zeros(nHOGRows,nHOGCols,cfg.nHOGBins);
-for i = 1:cfg.nHOGBins
-    cfg.indHOG(:,:,i) = ind4(:,:,i)+(i-1)*HOGSize;
+cfg.cellSize = [10 10];
+if cfg.useFeatures(3) % HOG
+    nHOGCols = floor(cfg.width/cfg.cellSize(1));
+    nHOGRows = floor(cfg.height/cfg.cellSize(2));
+%     nHOGCols = round(cfg.width/cfg.cellSize(1));
+%     nHOGRows = round(cfg.height/cfg.cellSize(2));
+%     TODO: fix this
+    HOGSize = nHOGCols*nHOGRows;
+    ind0 = 1:HOGSize;
+    ind1 = sort([ind0(1:4:end);ind0(2:4:end)]);
+    ind2 = sort([ind0(3:4:end);ind0(4:4:end)]);
+    ind3(:,1:2:nHOGCols) = reshape(ind1,nHOGRows,[]);
+    ind3(:,2:2:nHOGCols) = reshape(ind2,nHOGRows,[]);
+    ind4 = repmat(ind3,1,1,cfg.nHOGBins);
+    cfg.indHOG = zeros(nHOGRows,nHOGCols,cfg.nHOGBins);
+    for i = 1:cfg.nHOGBins
+        cfg.indHOG(:,:,i) = ind4(:,:,i)+(i-1)*HOGSize;
+    end
 end
 end
