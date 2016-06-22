@@ -60,8 +60,9 @@ Session.vim
 *.dat
 *.avi
 *.m4v
-toolboxes/**/**
-other/**/**
+toolboxes/*
+!toolboxes/liblinear-2.1/
+other/**
 *.csv
 *.db
 

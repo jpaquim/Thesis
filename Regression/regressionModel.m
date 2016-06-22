@@ -1,7 +1,10 @@
 function [model,predTrainDepths,predTestDepths] = regressionModel(...
     trainFeatures,trainDepths,testFeatures,modelType,lambda)
-%REGRESSIONMODEL Summary of this function goes here
-%   Detailed explanation goes here
+%REGRESSIONMODEL Trains a supervised learning regression model
+%   The function expects training features and target values, the type of
+%   model (currently only 'calibrated ls') and an optional regularization
+%   constant lambda. It trains the model and returns its predictions on
+%   both the training and test sets.
 
 trainDepths = log(trainDepths); % regression in logspace
 disp('Started training'); tic
@@ -14,6 +17,8 @@ switch modelType
             regressionCLS(trainFeatures,trainDepths,lambda,testFeatures);
 end
 toc; disp('Model trained');
+predTrainDepths = real(predTrainDepths); % TODO: correct bug, remove these
+predTestDepths = real(predTestDepths);
 predTrainDepths = exp(predTrainDepths); % convert back to linear space
 predTestDepths = exp(predTestDepths);
 end

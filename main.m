@@ -6,24 +6,32 @@ addpath Classification
 addpath Regression
 addpath Post-Processing
 addpath Optimization
-addpath Online-Learning
-addpath Stereo-Matching
+addpath Stereo
 addpath Misc
 
-trainDataset = 'CubicleTrain';
-testDataset = 'CubicleTest';
-% trainDataset = 'Make3DTrain';
-% testDataset = 'Make3DTest';
+trainDataset = 'ZED-03-full';
+testDataset = 'ZED-03-full';
 
 % structure that contains the configuration of the image, patches, textons
 cfg = defaultConfig(trainDataset);
 
-% load the training data set
+% load or generate the training data set
 [trainFeatures,trainDepths,indFilesTrain] = loadData(trainDataset,cfg);
-% load the test data set
-[testFeatures,testDepths,indFilesTest] = loadData(testDataset,cfg);
 
-% remove invalid depths/disparities
+if strcmp(trainDataset,testDataset) % use cross validation on the same set
+    proportion = 0.7;
+    [trainFeatures,testFeatures,trainDepths,testDepths,...
+    indPermTrain,indPermTest] = ...
+        validationPartition(trainFeatures,trainDepths,...
+        proportion,cfg.nPatches,false);
+    indFilesTest = indFilesTrain(indPermTest);
+    indFilesTrain = indFilesTrain(indPermTrain);
+else % load or generate the test data set
+    [testFeatures,testDepths,indFilesTest] = loadData(testDataset,cfg);
+end
+
+% TODO: remove invalid depths/disparities
+% validInd = findValidDepths(cfg);
 % trainValidInd = find(trainDepths >= 0);
 % trainFeatures = trainFeatures(trainValidInd,:);
 % auxDepth = zeros(size(trainDepths));
@@ -41,8 +49,8 @@ testFeatures = normalizeFeatures(testFeatures,offset,scale);
 trainFeatures = [trainFeatures ones(size(trainFeatures,1),1)];
 testFeatures = [testFeatures ones(size(testFeatures,1),1)];
 
-cfg.outputType = 'regression';
-% cfg.outputType = 'classification';
+cfg.outputType = 'regression'; % uncomment for regression
+% cfg.outputType = 'classification'; % uncomment for classification
 modelType = 'calibrated ls';
 % train the supervised learning model
 switch cfg.outputType

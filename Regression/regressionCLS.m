@@ -1,8 +1,9 @@
 function [model,YHatTrain,YHatTest] = ...
     regressionCLS(XTrain,YTrain,lambda,XTest)
-%REGRESSIONCLS Summary of this function goes here
-%   Detailed explanation goes here
-%   Algorithm is essentially a slightly modified version of the code found
+%REGRESSIONCLS Performs regression using the Calibrated Least Squares algorithm
+%   The algorithm is described in Agarwal, Kakade, et al. - Least Squares
+%   Revisited: Scalable Approaches for Multi-Class Prediction.
+%   This implementation is a slightly modified version of the code found
 %   here: https://github.com/fest/secondorderdemos
 
 [n,d] = size(XTrain);

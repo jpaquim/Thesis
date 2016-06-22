@@ -1,7 +1,10 @@
 function [model,predictedTrain,predictedTest] = classificationModel(...
-    trainFeatures,trainLabels,testFeatures,testLabels,modelType)
-%CLASSIFICATIONMODEL Summary of this function goes here
-%   Detailed explanation goes here
+    trainFeatures,trainLabels,testFeatures,testLabels,modelType,lambda)
+%CLASSIFICATIONMODEL Trains a supervised learning regression model
+%   The function expects training features and target values, the type of
+%   model (currently 'linear svm', 'logistic ls', or 'calibrated ls') and an
+%   optional regularization constant lambda. It trains the model and returns its
+%   predictions on both the training and test sets.
 
 disp('Started training'); tic
 switch modelType
@@ -11,7 +14,7 @@ switch modelType
         predictedTrain = predict(trainLabels,sparse(trainFeatures),model);
         predictedTest = predict(testLabels,sparse(testFeatures),model);
     case 'logistic ls'
-        model = logisticLeastSquares(trainFeatures,trainLabels);
+        model = multiLogisticLS(trainFeatures,trainLabels);
     case 'calibrated ls'
         if ~exist('lambda','var')
             lambda = 1;
@@ -21,8 +24,8 @@ switch modelType
             testFeatures,testLabels);
 %     case 'decision tree'
 %         model = fitctree(trainFeatures,trainLabels);
-%         predictedTrain = predict(treeModel,trainFeatures);
-%         predictedTest = predict(treeModel,testFeatures);
+%         predictedTrain = predict(model,trainFeatures);
+%         predictedTest = predict(model,testFeatures);
 end
 toc; disp('Model trained');
 end

@@ -1,6 +1,11 @@
-function model = logisticLeastSquares(X,Y)
-%MULTILOGISTICLS Summary of this function goes here
-%   Detailed explanation goes here
+function model = multiLogisticLS(X,Y)
+%MULTILOGISTICLS Performs classification using an iterative least squares
+%algorithm
+%   The algorithm is described in Agarwal, Kakade, et al. - Least Squares
+%   Revisited: Scalable Approaches for Multi-Class Prediction.
+%   This implementation is a slightly modified version of the code found here:
+%   https://github.com/fest/secondorderdemos
+
 
 [d,n] = size(X);
 k = size(Y,1);
@@ -21,15 +26,3 @@ model = W;
 YHat = bsxfun(@rdivide,exp(W*X),(1+sum(exp(W*X))));
 accuracy = sum(sum(Y.*(YHat>0.5)))/100;
 end
-
-% [n,d] = size(X);
-% k = size(Y,2);
-% W = randn(d,k);
-% invSigma = inv(X'*X/n); % inverse of the sample second order moment matrix
-% nIters = 1000;
-% for t = 1:nIters
-%     YHat = 1./(1+exp(X*W));
-%     W = W-invSigma*X'*(YHat-Y)/n;
-% end
-% model = W;
-% end

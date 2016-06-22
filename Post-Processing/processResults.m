@@ -13,10 +13,10 @@ switch cfg.outputType
 end
 % filter depths
 % predDepths = filterDepths(predDepths,cfg.mapSize,'median');
-% saturate to zero
-predDepths = max(predDepths,0);
-% plot example image, ground truth, labels, and prediction
-plotComparison(predDepths,depths,indFiles,dataset,cfg);
+% saturate to the minimum camera range
+predDepths = max(predDepths,cfg.minRange);
 % performance metrics after filtering
 performanceMetrics(predDepths,depths,dataset);
+% plot example image, ground truth, labels, and prediction
+plotComparison(predDepths,depths,indFiles,dataset,cfg);
 end
