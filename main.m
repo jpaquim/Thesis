@@ -1,7 +1,7 @@
 % add the paths of the various modules
 addpath Textons
 addpath Data-Handling
-addpath Feature-Extraction
+addpath Features
 addpath Classification
 addpath Regression
 addpath Post-Processing
@@ -9,8 +9,10 @@ addpath Optimization
 addpath Stereo
 addpath Misc
 
-trainDataset = 'ZED-03-full';
+trainDataset = 'ZED-01-raw';
 testDataset = 'ZED-03-full';
+% TODO: testDataset is always being regenerated when changed, because cfg
+% is different between the two datasets.
 
 % structure that contains the configuration of the image, patches, textons
 cfg = defaultConfig(trainDataset);

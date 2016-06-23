@@ -1,9 +1,12 @@
 function [features,depths,indFiles] = loadData(dataset,cfg)
 %LOADDATA Loads depth and features from the dataset
+%   [features,depths,indFiles] = LOADDATA(dataset,cfg)
 %   Returns the dataset's depth and features data, regenerates it if it's not
 %   available or if the configuration structure cfg has changed.
 
 filename = [dataset '.mat'];
+filename
+exist(filename,'file')
 if exist(filename,'file') % if the data file already exists
     fileVars = load(filename,'cfg');
     if isequal(fileVars.cfg,cfg) % and if cfg is the same

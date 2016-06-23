@@ -1,5 +1,6 @@
 function binData = convertToBinClasses(data,nClasses)
 %CONVERTTOBINCLASSES Converts from numeric class descriptions to binary vectors
+%   binData = CONVERTTOBINCLASSES(data,nClasses)
 %   Converts data from numeric 1-nClasses class descriptions to
 %   binary, length nClasses vectors, preserving vector orientation.
 %   [1;3;5], if nClasses = 6, is converted into [1 0 0 0 0 0;

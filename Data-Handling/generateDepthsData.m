@@ -1,5 +1,6 @@
 function depths = generateDepthsData(depthFiles,cfg)
 %GENERATEDEPTHSDATA Reads depth image files, returns a vector with all the data
+%   depths = GENERATEDEPTHSDATA(depthFiles,cfg)
 %   The input files are specifed as a cell vector of filenames, additional
 %   required data is read from the cfg configuration structure.
 

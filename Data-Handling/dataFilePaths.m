@@ -1,6 +1,8 @@
 function [imgFiles,depthFiles,indFiles] = ...
     dataFilePaths(dataset,indFiles,shuffle)
 %DATAFILEPATHS Retuns lists of the image and depth file paths
+%   [imgFiles,depthFiles,indFiles] = ...
+%       DATAFILEPATHS(dataset,indFiles,shuffle)
 %   Given the dataset's name, this function will return the paths to the
 %   corresponding image and depth files. If indFiles is specified as a scalar,
 %   and shuffle is true, it will be interpreted as the number of files to return

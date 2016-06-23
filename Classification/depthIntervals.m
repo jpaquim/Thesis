@@ -1,6 +1,7 @@
 function [edges,centers] = depthIntervals(depths,nClasses,classType)
 %DEPTHINTERVALS Computes intervals for classification of continuous depths into
 %discrete depth classes
+%   [edges,centers] = depthIntervals(depths,nClasses,classType)
 %   Given the depth data to be discretized, the number of desired classes, and
 %   the specified class type, the function returns the most adequate edges and
 %   centers of the intervals corresponding to the discretization. Available

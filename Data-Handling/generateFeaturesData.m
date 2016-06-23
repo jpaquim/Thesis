@@ -1,5 +1,6 @@
 function features = generateFeaturesData(imgFiles,cfg)
 %GENERATEFEATURESDATA Generates the features from the images
+%   features = GENERATEFEATURESDATA(imgFiles,cfg)
 %   The input files are specifed as a cell vector of filenames, additional
 %   required data is read from the cfg configuration structure.
 
