@@ -1,6 +1,7 @@
 function model = multiLogisticLS(X,Y)
 %MULTILOGISTICLS Performs classification using an iterative least squares
 %algorithm
+%   model = MULTILOGISTICLS(X,Y)
 %   The algorithm is described in Agarwal, Kakade, et al. - Least Squares
 %   Revisited: Scalable Approaches for Multi-Class Prediction.
 %   This implementation is a slightly modified version of the code found here:

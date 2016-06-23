@@ -1,6 +1,8 @@
 function [model,predictedTrain,predictedTest] = classificationModel(...
     trainFeatures,trainLabels,testFeatures,testLabels,modelType,lambda)
 %CLASSIFICATIONMODEL Trains a supervised learning regression model
+%   [model,predictedTrain,predictedTest] = CLASSIFICATIONMODEL(...
+%       trainFeatures,trainLabels,testFeatures,testLabels,modelType,lambda)
 %   The function expects training features and target values, the type of
 %   model (currently 'linear svm', 'logistic ls', or 'calibrated ls') and an
 %   optional regularization constant lambda. It trains the model and returns its

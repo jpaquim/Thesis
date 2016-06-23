@@ -1,6 +1,8 @@
 function [model,predTrainDepths,predTestDepths] = regressionModel(...
     trainFeatures,trainDepths,testFeatures,modelType,lambda)
 %REGRESSIONMODEL Trains a supervised learning regression model
+%   [model,predTrainDepths,predTestDepths] =
+%       REGRESSIONMODEL(trainFeatures,trainDepths,testFeatures,modelType,lambda)
 %   The function expects training features and target values, the type of
 %   model (currently only 'calibrated ls') and an optional regularization
 %   constant lambda. It trains the model and returns its predictions on
