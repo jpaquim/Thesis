@@ -1,22 +1,22 @@
-function processResults(preds,depths,indFiles,dataset,cfg)
+function processResults(predictions,depths,fileNumbers,dataset,cfg)
 %PROCESSRESULTS Summary of this function goes here
 %   Detailed explanation goes here
 
 switch cfg.outputType
     case 'regression'
-        predDepths = preds;
+        depthPredictions = predictions;
     case 'classification'
 %         plot confusion matrix
 %         figure; plotConfusionMatrix(labels,preds,cfg.nClasses);
 %         convert labels to depths using the class centers
-        predDepths = cfg.classCenters(preds)';
+        depthPredictions = cfg.classCenters(predictions)';
 end
 % filter depths
-% predDepths = filterDepths(predDepths,cfg.mapSize,'median');
+depthPredictions = filterDepths(depthPredictions,cfg.mapSize,'median');
 % saturate to the minimum camera range
-predDepths = max(predDepths,cfg.minRange);
+depthPredictions = max(depthPredictions,cfg.minRange);
 % performance metrics after filtering
-performanceMetrics(predDepths,depths,dataset);
+performanceMetrics(depthPredictions,depths,dataset);
 % plot example image, ground truth, labels, and prediction
-plotComparison(predDepths,depths,indFiles,dataset,cfg);
+plotComparison(depthPredictions,depths,fileNumbers,dataset,cfg);
 end

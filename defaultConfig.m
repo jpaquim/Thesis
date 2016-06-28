@@ -1,10 +1,8 @@
 function cfg = defaultConfig(dataset)
-%DEFAULTCONFIG Default configuration for computation of features, textons,
-%etc.
-%   The returned structure contains the definitions for various properties
-%   used throughout the program, namely the dimensions of the dataset's
-%   images, the range of the depth data, and parameters for the computed
-%   features
+%DEFAULTCONFIG Default configuration for computation of features, textons, etc.
+%   The returned structure contains the definitions for various properties used
+%   throughout the program, namely the dimensions of the dataset's images, the
+%   range of the depth data, and parameters for the computed features
 
 cfg.dataset = dataset;
 fixedSize = true;
@@ -27,6 +25,7 @@ elseif ~isempty(strfind(dataset, 'NYU'))
     range = [0.7133 9.9955];
 elseif ~isempty(strfind(dataset, 'ZED'))
     range = [1 20];
+    cfg.confidenceThreshold = 0.05;
 else
     range = [1 100];
 end

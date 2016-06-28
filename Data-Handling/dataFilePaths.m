@@ -1,19 +1,18 @@
-function [imgFiles,depthFiles,indFiles] = ...
-    dataFilePaths(dataset,indFiles,shuffle)
+function [imgFiles,depthFiles,fileNumbers] = ...
+    dataFilePaths(dataset,fileNumbers,shuffle)
 %DATAFILEPATHS Retuns lists of the image and depth file paths
-%   [imgFiles,depthFiles,indFiles] = ...
-%       DATAFILEPATHS(dataset,indFiles,shuffle)
+%   [imgFiles,depthFiles,fileNumbers] = ...
+%       DATAFILEPATHS(dataset,fileNumbers,shuffle)
 %   Given the dataset's name, this function will return the paths to the
-%   corresponding image and depth files. If indFiles is specified as a scalar,
-%   and shuffle is true, it will be interpreted as the number of files to return
-%   at random. If indFiles is a vector, it will be interpreted as the specific
-%   files to be returned (in a random order, if shuffle is true). If indFiles is
-%   the string 'all', every file will be returned (in a random order, if shuffle
-%   is true).
+%   corresponding image and depth files. If fileNumbers is specified as a
+%   scalar, and shuffle is true, it will be interpreted as the number of files
+%   to return at random. If fileNumbers is a vector, it will be interpreted as
+%   the specific files to be returned (in a random order, if shuffle is true).
+%   If fileNumbers is the string 'all', every file will be returned (in a random
+%   order, if shuffle is true).
 %   
-%   The outputs imgFiles and depthFiles are strings or cell arrays of strings,
-%   indFiles is a vector containing the indices of the returned files, which
-%   describe their ordering within the containing folder.
+%   The outputs imgFiles and depthFiles are either strings or cell arrays of
+%   strings, if the number of returned files is > 1.
 
 folderPrefix = './data/';
 
@@ -32,20 +31,20 @@ if nFiles ~= length(depthFiles) % basic error checking
     error('Unbalanced image and depth data');
 end
 
-if exist('indFiles','var') % returns only some files
+if exist('fileNumbers','var') % returns only some files
     if exist('shuffle','var') && shuffle
-        if isscalar(indFiles) % treat it as the number of files requested
-            nFilesReq = indFiles; % selected at random
-            indFiles = randperm(nFiles,nFilesReq);
-        elseif strcmp(indFiles,'all') % returns the full file list shuffled
-            indFiles = randperm(nFiles);
-        else % permute the elements of ind at random
-            indFiles = indFiles(randperm(length(indFiles)));
+        if isscalar(fileNumbers) % treat it as the number of requested
+            nFilesReq = fileNumbers; % files instead, selected at random
+            fileNumbers = randperm(nFiles,nFilesReq);
+        elseif strcmp(fileNumbers,'all') % returns all the files, shuffled
+            fileNumbers = randperm(nFiles);
+        else % just permute the elements of fileNumbers at random
+            fileNumbers = fileNumbers(randperm(length(fileNumbers)));
         end
     end
-    imgFiles = imgFiles(indFiles);
-    depthFiles = depthFiles(indFiles);
-    if isscalar(indFiles) % return string instead of one element cell
+    imgFiles = imgFiles(fileNumbers);
+    depthFiles = depthFiles(fileNumbers);
+    if isscalar(fileNumbers) % return string instead of one element cell
         imgFiles = imgFiles{1};
         depthFiles = depthFiles{1};
     end
