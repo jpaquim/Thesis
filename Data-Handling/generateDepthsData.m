@@ -14,9 +14,15 @@ for i = 1:nFiles
     end
     depthMap = double(depthMap)/255;
     depthMap = cfg.minRange+(cfg.maxRange-cfg.minRange)*depthMap;
+    if ~isempty(strfind(cfg.dataset,'ZED'))
+        confidenceFilename = strrep(depthFiles{i},'depth','conf');
+        confidenceMap = double(rgb2gray(imread(confidenceFilename)))/255;
+        depthMap(confidenceMap < cfg.confidenceThreshold) = NaN;
+    elseif ~isempty(strfind(cfg.dataset,'KITTI'))
+%         how to detect low confidence regions in KITTI?
+    end
     ind = (1:cfg.nPatches)+(i-1)*cfg.nPatches;
-%     depths(ind) = depthMap;
-%     resize the depth map into a standard size
+%     resize the depth map into the standard size
     depths(ind) = imresize(depthMap,cfg.mapSize);
 end
 end
