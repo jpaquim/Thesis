@@ -14,9 +14,10 @@ if exist(filename,'file') % if the data file already exists
     end
 end
 % if the data file doesn't exist, or cfg has changed, regenerate the data
-nFiles = 50; % for testing purposes
+% nFiles = 50; % for testing purposes
+[imgFiles,depthFiles,fileNumbers] = dataFilePaths(dataset,'all');
 % [imgFiles,depthFiles,fileNumbers] = dataFilePaths(dataset,nFiles,true);
-[imgFiles,depthFiles,fileNumbers] = dataFilePaths(dataset,1:nFiles);
+% [imgFiles,depthFiles,fileNumbers] = dataFilePaths(dataset,1:nFiles);
 depths = generateDepthsData(depthFiles,cfg);
 features = generateFeaturesData(imgFiles,cfg);
 save(filename,'features','depths','fileNumbers','cfg');

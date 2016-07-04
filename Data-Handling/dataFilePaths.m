@@ -41,6 +41,8 @@ if exist('fileNumbers','var') % returns only some files
         else % just permute the elements of fileNumbers at random
             fileNumbers = fileNumbers(randperm(length(fileNumbers)));
         end
+    elseif strcmp(fileNumbers,'all') % returns all the files, in order
+        fileNumbers = 1:nFiles;
     end
     imgFiles = imgFiles(fileNumbers);
     depthFiles = depthFiles(fileNumbers);

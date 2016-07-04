@@ -25,7 +25,6 @@ elseif ~isempty(strfind(dataset, 'NYU'))
     range = [0.7133 9.9955];
 elseif ~isempty(strfind(dataset, 'ZED'))
     range = [1 20];
-    cfg.confidenceThreshold = 0.05;
 else
     range = [1 100];
 end
@@ -82,7 +81,7 @@ filterDims = [9;2;6];
 cfg.nFilters = dot(filterDims,cfg.useFilters);
 
 % number of size scales at which filter features are calculated
-cfg.nScales = 2;
+cfg.nScales = 3;
 % dimensions of each feature group, in the above order
 featureDims = [2;2*cfg.nFilters*cfg.nScales;cfg.nHOGBins;cfg.nTextons;...
                2*cfg.nRadonAngles;cfg.nStructBins];

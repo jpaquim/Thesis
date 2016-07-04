@@ -9,9 +9,9 @@ addpath Optimization
 addpath Stereo
 
 trainDataset = 'ZED-12-raw';
-testDataset = 'ZED-12-full';
-% TODO: testDataset is always being regenerated when changed, because cfg
-% is different between the two datasets.
+testDataset = 'ZED-12-raw';
+% TODO: testDataset is always being regenerated when changed, because cfg is
+% different between the two datasets.
 
 % structure that contains the configuration of the image, patches, textons
 cfg = defaultConfig(trainDataset);
@@ -31,14 +31,12 @@ else % load or generate the test data set
     [testFeatures,testDepths,testFileNumbers] = loadData(testDataset,cfg);
 end
 
-trainValidPatches = find(~isnan(trainDepths));
-trainFeatures = trainFeatures(trainValidPatches,:);
-trainAuxDepths = zeros(size(trainDepths));
-trainDepths = trainDepths(trainValidPatches);
-testValidPatches = find(~isnan(testDepths));
-testFeatures = testFeatures(testValidPatches,:);
-testAuxDepths = zeros(size(testDepths));
-testDepths = testDepths(testValidPatches);
+% filter out low confidence patches, to avoid learning wrong ground truths
+confidenceThreshold = 0.1;
+[trainFeatures,trainDepths,trainValidPatches] = filterByConfidence(...
+    trainFeatures,trainDepths,trainFileNumbers,confidenceThreshold,cfg);
+% [testFeatures,testDepths,testValidPatches] = filterByConfidence(...
+%     testFeatures,testDepths,testFileNumbers,confidenceThreshold,cfg);
 
 % normalize the training features to the [0 1] range
 [trainFeatures,offset,scale] = normalizeFeatures(trainFeatures);
@@ -73,15 +71,18 @@ switch cfg.outputType
             trainFeatures,trainLabels,testFeatures,testLabels,modelType);
 end
 
+% rebuild the full depth maps for plotting, using ones as placeholders in
+% low-confidence patches
+trainAuxDepths = ones(cfg.nPatches*length(trainFileNumbers),1);
 trainAuxDepths(trainValidPatches,:) = trainPredictions;
 trainPredictions = trainAuxDepths;
 trainAuxDepths(trainValidPatches,:) = trainDepths;
 trainDepths = trainAuxDepths;
-
-testAuxDepths(testValidPatches,:) = testPredictions;
-testPredictions = testAuxDepths;
-testAuxDepths(testValidPatches,:) = testDepths;
-testDepths = testAuxDepths;
+% testAuxDepths = ones(cfg.nPatches*length(testFileNumbers),1);
+% testAuxDepths(testValidPatches,:) = testPredictions;
+% testPredictions = testAuxDepths;
+% testAuxDepths(testValidPatches,:) = testDepths;
+% testDepths = testAuxDepths;
 
 % perform post-processing and analysis on the predicted results
 processResults(trainPredictions,trainDepths,trainFileNumbers,trainDataset,cfg);
