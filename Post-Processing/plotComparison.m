@@ -1,7 +1,11 @@
 function plotComparison(depthPredictions,depths,fileNumbers,dataset,cfg,...
     fileIndex)
-%PLOTCOMPARISON Summary of this function goes here
-%   Detailed explanation goes here
+%PLOTCOMPARISON Plots a side by side comparison of the image, depth ground
+%truth, and depth predictions.
+%   plotComparison(depthPredictions,depths,fileNumbers,dataset,cfg,fileIndex)
+%   Opens a new figure with the color image, depth ground truth, and depth
+%   predictions, side by side. If fileIndex is given, the specified file will be
+%   shown, otherwise it will be selected at random.
 
 if ~exist('ind','var')
     fileIndex = unidrnd(length(fileNumbers));
