@@ -1,6 +1,9 @@
 function labels = labelDepths(depths,edges)
-%LABELDEPTHS Summary of this function goes here
-%   Detailed explanation goes here
+%LABELDEPTHS Labels depth data according to the discrete intervals
+%   labels = LABELDEPTHS(depths,edges)
+%   For each element of depths, returns the numeric label of its enclosing
+%   interval, where the intervals are specified by their edges in the edges
+%   vector.
 
 leftEdges = edges(1:end-1);
 rightEdges = edges(2:end);

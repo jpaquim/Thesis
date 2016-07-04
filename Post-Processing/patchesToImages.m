@@ -1,6 +1,12 @@
 function imageData = patchesToImages(patchData,imgSize,indImg)
-%PATCHESTOIMAGES Summary of this function goes here
-%   Detailed explanation goes here
+%PATCHESTOIMAGES Converts 
+%   imageData = PATCHESTOIMAGES(patchData,imgSize,indImg)
+%   Converts a multiple images given either as different columns of the same
+%   matrix, or as fixed length sections of the same column into stacks of
+%   images, nRows x nCols x nDims. If indImg is given, all of the columns
+%   associated with the specified image are returned. If it's not given, the
+%   patchData matrix must be a single column, and all of the different images
+%   in that column are returned.
 
 nRows = imgSize(1);
 nCols = imgSize(2);

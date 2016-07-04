@@ -1,88 +1,90 @@
-% converts the data sets to the same format, similar to Make3D
+% converts the data sets to the same format, pairs of '-img' and '-depth'
+% folders of PNGs
 
+% Depth datasets
 cd data
 
 % Make3D
-imgPrefix = {'TrainImgMake3D/','TestImgMake3D/'};
-depthPrefix = {'TrainDepthMake3D/','TestDepthMake3D/'};
-folderPrefix = 'Make3D/';
-imgFolders = strcat(folderPrefix,{'Train400Img/','Test134/'});
-depthFolders = strcat(folderPrefix,{'Train400Depth/','Gridlaserdata/'});
+sourceDataFolder = 'Make3D/';
+sourceImgFolders = strcat(sourceDataFolder,{'Train400Img/','Test134/'});
+sourceDepthFolders = strcat(sourceDataFolder,{'Train400Depth/','Gridlaserdata/'});
+destImgFolders = {'Make3D-train-img/','Make3D-test-img/'};
+destDepthFolders = {'Make3D-train-depth/','Make3D-test-depth/'};
 for i = 1:2
-    if ~exist(imgPrefix{i},'file') || ~exist(depthPrefix{i},'file')
-        dirFiles = dir([imgFolders{i} '*.jpg']);
-        imgFiles = strcat(imgFolders{i},{dirFiles.name}');
-        dirFiles = dir([depthFolders{i} '*.mat']);
-        depthFiles = strcat(depthFolders{i},{dirFiles.name}');
+    if ~exist(destImgFolders{i},'file') || ~exist(destDepthFolders{i},'file')
+        dirFiles = dir([sourceImgFolders{i} '*.jpg']);
+        imgFiles = strcat(sourceImgFolders{i},{dirFiles.name}');
+        dirFiles = dir([sourceDepthFolders{i} '*.mat']);
+        depthFiles = strcat(sourceDepthFolders{i},{dirFiles.name}');
         nFiles = length(imgFiles);
         if nFiles ~= length(depthFiles) % basic error checking
             error('Unbalanced image and depth data');
         end
-        mkdir(imgPrefix{i});
-        mkdir(depthPrefix{i});
+        mkdir(destImgFolders{i});
+        mkdir(destDepthFolders{i});
         for j = 1:nFiles
-            fileName = num2str(j,'%04d');
+            filename = num2str(j-1,'%04d.png');
             imageData = imread(imgFiles{j});
-            imwrite(imageData,[imgPrefix{i} fileName '.png']);
+            imwrite(imageData,[destImgFolders{i} filename]);
             load(depthFiles{j});
-            depth = Position3DGrid(:,:,4);
-            save([depthPrefix{i} fileName '.mat'],'depth');
+            depthMap = Position3DGrid(:,:,4);
+            minDepth = 0.9200; maxDepth = 81.9214;
+            depthMap = (depthMap-minDepth)/(maxDepth-minDepth);
+            imwrite(depthMap,[destDepthFolders{i} filename]);
         end
     end
 end
 
 % NYU Depth V2
 trainPortion = 0.7; % portion allocated to the training set
-imgPrefix = {'TrainImgNYU/','TestImgNYU/'};
-depthPrefix = {'TrainDepthNYU/','TestDepthNYU/'};
-if ~exist(imgPrefix{1},'file') || ~exist(depthPrefix{1},'file') || ...
-   ~exist(imgPrefix{2},'file') || ~exist(depthPrefix{2},'file')
-    mkdir(imgPrefix{1});
-    mkdir(imgPrefix{2});
-    mkdir(depthPrefix{1});
-    mkdir(depthPrefix{2});
+destImgFolders = {'NYU-train-img/','NYU-test-img/'};
+destDepthFolders = {'NYU-train-depth/','NYU-test-depth/'};
+if ~exist(destImgFolders{1},'file') || ~exist(destDepthFolders{1},'file') || ...
+   ~exist(destImgFolders{2},'file') || ~exist(destDepthFolders{2},'file')
+    mkdir(destImgFolders{1}); mkdir(destDepthFolders{1});
+    mkdir(destImgFolders{2}); mkdir(destDepthFolders{2});
     load('NYUDepthV2/nyu_depth_v2_labeled.mat');
     nFiles = size(images,4);
     n = [0 0];
     for i = 1:nFiles
         j = 1+(rand() > trainPortion); % 1 for training, 2 for test
         n(j) = n(j)+1; % increment corresponding count
-        fileName = num2str(n(j),'%04d');
-        imwrite(images(:,:,:,i),[imgPrefix{j} fileName '.png']);
-        depth = depths(:,:,i);
-        save([depthPrefix{j} fileName '.mat'],'depth');
+        filename = num2str(n(j)-1,'%04d.png');
+        imwrite(images(:,:,:,i),[destImgFolders{j} filename]);
+        depthMap = depths(:,:,i);
+        minDepth = 0.7133; maxDepth = 9.9955;
+        depthMap = (depthMap-minDepth)/(maxDepth-minDepth);
+        imwrite(depthMap,[destDepthFolders{j} filename]);
     end
 end
 
+
 % KITTI
 trainPortion = 0.7; % portion allocated to the training set
-imgPrefix = {'TrainImgKITTI/','TestImgKITTI/'};
-dispPrefix = {'TrainDispKITTI/','TestDispKITTI/'};
-if ~exist(imgPrefix{1},'file') || ~exist(dispPrefix{1},'file') || ...
-   ~exist(imgPrefix{2},'file') || ~exist(dispPrefix{2},'file')
-    folderPrefix = 'KITTI/training/';
-    imgFolder = [folderPrefix 'image_2/']; % left camera images
-    dispFolder = [folderPrefix 'disp_occ_0/'];
-    dirFiles = dir([imgFolder '*0.png']); % only the first of the image pairs
-    imgFiles = strcat(imgFolder,{dirFiles.name}');
-    dirFiles = dir([dispFolder '*.png']);
-    dispFiles = strcat(dispFolder,{dirFiles.name}');
+destImgFolders = {'KITTI-train-img/','KITTI-test-img/'};
+destDispFolders = {'KITTI-train-disp/','KITTI-test-disp/'};
+if ~exist(destImgFolders{1},'file') || ~exist(destDispFolders{1},'file') || ...
+   ~exist(destImgFolders{2},'file') || ~exist(destDispFolders{2},'file')
+    sourceDataFolder = 'KITTI/training/';
+    sourceImgFolder = [sourceDataFolder 'image_2/']; % left camera images
+    destDispFolder = [sourceDataFolder 'disp_occ_0/'];
+    dirFiles = dir([sourceImgFolder '*0.png']); % only the first of the image pairs
+    imgFiles = strcat(sourceImgFolder,{dirFiles.name}');
+    dirFiles = dir([destDispFolder '*.png']);
+    dispFiles = strcat(destDispFolder,{dirFiles.name}');
     nFiles = length(imgFiles);
     if nFiles ~= length(dispFiles) % basic error checking
         error('Unbalanced image and depth data');
     end
-    mkdir(imgPrefix{1});
-    mkdir(imgPrefix{2});
-    mkdir(dispPrefix{1});
-    mkdir(dispPrefix{2});
+    mkdir(destImgFolders{1}); mkdir(destDispFolders{1});
+    mkdir(destImgFolders{2}); mkdir(destDispFolders{2});
     n = [0 0];
     for i = 1:nFiles
         j = 1+(rand() > trainPortion); % 1 for training, 2 for test
         n(j) = n(j)+1; % increment corresponding count
-        fileName = num2str(n(j),'%04d');
-        copyfile(imgFiles{i},[imgPrefix{j} fileName '.png']);
-        disps = double(imread(dispFiles{i}))./256.0;
-        save([dispPrefix{j} fileName '.mat'],'disps');
+        filename = num2str(n(j)-1,'%04d.png');
+        copyfile(imgFiles{i},[destImgFolders{j} filename]);
+        copyfile(dispFiles{i},[destDispFolders{j} filename]);
     end
 end
 

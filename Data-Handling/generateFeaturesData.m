@@ -1,6 +1,8 @@
 function features = generateFeaturesData(imgFiles,cfg)
-%GENERATEFEATURESDATA Summary of this function goes here
-%   Detailed explanation goes here
+%GENERATEFEATURESDATA Generates the features from the images
+%   features = GENERATEFEATURESDATA(imgFiles,cfg)
+%   The input files are specifed as a cell vector of filenames, additional
+%   required data is read from the cfg configuration structure.
 
 nFiles = length(imgFiles);
 % load the various filters to be applied to the images
@@ -15,7 +17,7 @@ features = zeros(nInstances,cfg.nFeatures);
 disp('Generating features');
 for i = 1:nFiles
     fprintf('File: %d/%d\n',i,nFiles);
-%     read image from file and resize it to the training data size
+%     read image from file, resize it to the training data size, or fixed
     img = imresize(imread(imgFiles{i}),cfg.size);
     ind = (1:cfg.nPatches)+(i-1)*cfg.nPatches;
     features(ind,:) = extractImgFeatures(img,filters,channels,textons,cfg);

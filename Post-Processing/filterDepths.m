@@ -1,12 +1,22 @@
-function [ output_args ] = filterDepths(depths,gridSize)
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+function depthsFilt = filterDepths(depths,mapSize,filterType)
+%FILTERDEPTHS Filters depth data according to the specified filter
+%   depthsFilt = FILTERDEPTHS(depths,mapSize,filterType)
+%   Applies the filter given in filterType, which can be either 'median' or
+%   'gaussian' to the depth data given in the depths vector, where the actual
+%   depth maps are sized mapSize(1) by mapSize(2).
 
-depthStack = patchesToImages(depths,gridSize);
-for i = 1:length(indFilesTrain)
-    predTrainDepthsFilt(:,:,i) = medfilt2(predTrainStack(:,:,i));
-    predTestDepthsFilt(:,:,i) = medfilt2(depthStack(:,:,i));
+depthsStack = patchesToImages(depths,mapSize);
+depthsFilt = zeros(size(depthsStack));
+switch filterType
+    case 'median'
+        for i = 1:size(depthsStack,3);
+            depthsFilt(:,:,i) = medfilt2(depthsStack(:,:,i),'symmetric');
+        end
+    case 'gaussian'
+        hSize = 10;
+        sigma = 1;
+        depthsFilt = imfilter(depthsStack,...
+            fspecial('gaussian',hSize,sigma));
 end
-predTrainDepthsFilt = predTrainDepthsFilt(:);
-predTestDepthsFilt = predTestDepthsFilt(:);
+depthsFilt = depthsFilt(:);
 end

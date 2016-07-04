@@ -1,9 +1,13 @@
 function [model,YHatTrain,YHatTest] = ...
     classificationCLS(XTrain,YTrainCat,lambda,XTest,YTestCat)
-%CLASSIFICATIONCLS Summary of this function goes here
-%   Detailed explanation goes here
-%   Algorithm is essentially a slightly modified version of the code found
-%   here: https://github.com/fest/secondorderdemos
+%CLASSIFICATIONCLS Performs classification using the Calibrated Least Squares
+%algorithm
+%   [model,YHatTrain,YHatTest] = ...
+%       CLASSIFICATIONCLS(XTrain,YTrainCat,lambda,XTest,YTestCat)
+%   The algorithm is described in Agarwal, Kakade, et al. - Least Squares
+%   Revisited: Scalable Approaches for Multi-Class Prediction.
+%   This implementation is a slightly modified version of the code found here:
+%   https://github.com/fest/secondorderdemos
 
 YTrain = convertToBinClasses(YTrainCat,10);
 [n,d] = size(XTrain);
