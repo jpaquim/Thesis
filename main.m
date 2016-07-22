@@ -9,7 +9,7 @@ addpath Optimization
 addpath Stereo
 
 trainDataset = 'ZED-12-raw';
-testDataset = 'ZED-12-raw';
+testDataset = 'ZED-12-full';
 % TODO: testDataset is always being regenerated when changed, because cfg is
 % different between the two datasets.
 
@@ -32,7 +32,7 @@ else % load or generate the test data set
 end
 
 % filter out low confidence patches, to avoid learning wrong ground truths
-confidenceThreshold = 0.1;
+confidenceThreshold = 0.2;
 [trainFeatures,trainDepths,trainValidPatches] = filterByConfidence(...
     trainFeatures,trainDepths,trainFileNumbers,confidenceThreshold,cfg);
 % [testFeatures,testDepths,testValidPatches] = filterByConfidence(...
