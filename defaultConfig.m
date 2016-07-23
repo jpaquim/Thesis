@@ -25,6 +25,8 @@ elseif ~isempty(strfind(dataset, 'NYU'))
     range = [0.7133 9.9955];
 elseif ~isempty(strfind(dataset, 'ZED'))
     range = [1 20];
+elseif ~isempty(strfind(dataset, 'HEIGHT'))
+    range = [0.0 4.0];
 else
     range = [1 100];
 end

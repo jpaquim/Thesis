@@ -8,8 +8,8 @@ addpath Post-Processing
 addpath Optimization
 addpath Stereo
 
-trainDataset = 'ZED-12-raw';
-testDataset = 'ZED-12-raw';
+trainDataset = 'Make3D-train';%'ZED-12-raw'; %'HEIGHT-train';%
+testDataset = 'Make3D-train'; %'ZED-12-raw'; %'HEIGHT-test';%
 % TODO: testDataset is always being regenerated when changed, because cfg is
 % different between the two datasets.
 
