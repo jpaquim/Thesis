@@ -1,6 +1,7 @@
 function processResults(predictions,depths,fileNumbers,dataset,cfg)
-%PROCESSRESULTS Summary of this function goes here
-%   Detailed explanation goes here
+%PROCESSRESULTS Plots comparisons and reports error metrics of the learning
+%outcome
+%   PROCESSRESULTS(predictions,depths,fileNumbers,dataset,cfg)
 
 switch cfg.outputType
     case 'regression'
