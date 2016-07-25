@@ -80,7 +80,7 @@ cfg.useFilters = ismember(cfg.possibleFilters,cfg.filterTypes);
 % dimensions of each filter group, in the above order
 cfg.filterDims = [9;2;6];
 % total number of filters
-cfg.nFilters = dot(filterDims,cfg.useFilters);
+cfg.nFilters = dot(cfg.filterDims,cfg.useFilters);
 
 % number of size scales at which filter features are calculated
 cfg.nScales = 3;

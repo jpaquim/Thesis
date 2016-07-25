@@ -16,7 +16,7 @@ if cfg.useFeatures(2)
     for j = 1:length(cfg.possibleFilters)
         if(cfg.useFilters(j))
             for i = 1:cfg.filterDims(j)
-                for s = 1:cgf.nScales
+                for s = 1:cfg.nScales
                    fprintf(fID, ['@attribute ' cfg.possibleFilters{j} '_%d_sc%d_abs real\n'], i, s);
                    fprintf(fID, ['@attribute ' cfg.possibleFilters{j} '_%d_sc%d_sqr real\n'], i, s);
                 end
@@ -55,6 +55,9 @@ fprintf(fID, '@data\n');
 % create WEKA data set:
 fprintf('Data set\n');
 for s = 1:size(Features, 1)
+    if(mod(s, round(size(Features,1)/100)) == 0)
+        fprintf('.');
+    end
     for f = 1:cfg.nFeatures
         fprintf(fID, '%f, ', Features(s, f));
     end
