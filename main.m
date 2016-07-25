@@ -8,8 +8,8 @@ addpath Post-Processing
 addpath Optimization
 addpath Stereo
 
-trainDataset = 'ZED-12-raw'; %'Make3D-train';%'HEIGHT-train';%
-testDataset = 'ZED-12-raw'; %'Make3D-train'; %'HEIGHT-test';%
+trainDataset = 'Make3D-train';%'ZED-12-raw'; %'HEIGHT-train';%
+testDataset = 'Make3D-train'; %'ZED-12-raw'; %'HEIGHT-test';%
 
 % TODO: testDataset is always being regenerated when changed, because cfg is
 % different between the two datasets.
@@ -19,6 +19,13 @@ cfg = defaultConfig(trainDataset);
 
 % load or generate the training data set
 [trainFeatures,trainDepths,trainFileNumbers] = loadData(trainDataset,cfg);
+
+% also save the data set in WEKA format
+% https://sourceforge.net/projects/weka/
+SAVE_AS_WEKA = true;
+if(SAVE_AS_WEKA)
+   saveWEKA(cfg, trainDataset, trainFeatures, trainDepths); 
+end
 
 if strcmp(trainDataset,testDataset) % use cross validation on the same set
     proportion = 0.7;

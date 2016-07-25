@@ -72,13 +72,13 @@ cfg.featureTypes = {'Filters','Textons','Radon'};
 cfg.useFeatures = ismember(possibleFeatures,cfg.featureTypes);
 
 % possible filter types: LawsMasks, CbCrLocalAverage, OrientedEdgeDetectors
-possibleFilters = {'LawsMasks','CbCrLocalAverage','OrientedEdgeDetectors'};
+cfg.possibleFilters = {'LawsMasks','CbCrLocalAverage','OrientedEdgeDetectors'};
 cfg.filterTypes = {'LawsMasks','CbCrLocalAverage','OrientedEdgeDetectors'};
 % cfg.filterTypes = {'LawsMasks','OrientedEdgeDetectors'}; % for B&W images
 % boolean vector indicating filters used
-cfg.useFilters = ismember(possibleFilters,cfg.filterTypes);
+cfg.useFilters = ismember(cfg.possibleFilters,cfg.filterTypes);
 % dimensions of each filter group, in the above order
-filterDims = [9;2;6];
+cfg.filterDims = [9;2;6];
 % total number of filters
 cfg.nFilters = dot(filterDims,cfg.useFilters);
 
