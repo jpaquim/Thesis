@@ -18,8 +18,9 @@ if ~isempty(strfind(cfg.dataset,'ZED'))
         validPatches(ind) = true;
     end
 elseif ~isempty(strfind(cfg.dataset,'KITTI'))
-%     how to detect low confidence regions in KITTI?
-elseif ~isempty(strfind(cfg.dataset,'Make3D'))
+%     zero values are assumed to be low confidence regions as per the literature
+    validPatches = find(depths > cfg.minRange);
+else
     validPatches = ones(size(depths));
 end
 validPatches = find(validPatches);

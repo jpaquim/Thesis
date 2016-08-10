@@ -2,7 +2,7 @@ function plotComparison(depthPredictions,depths,fileNumbers,dataset,cfg,...
     fileIndex)
 %PLOTCOMPARISON Plots a side by side comparison of the image, depth ground
 %truth, and depth predictions.
-%   plotComparison(depthPredictions,depths,fileNumbers,dataset,cfg,fileIndex)
+%   PLOTCOMPARISON(depthPredictions,depths,fileNumbers,dataset,cfg,fileIndex)
 %   Opens a new figure with the color image, depth ground truth, and depth
 %   predictions, side by side. If fileIndex is given, the specified file will be
 %   shown, otherwise it will be selected at random.
@@ -35,4 +35,5 @@ switch cfg.outputType
         subplot(1,3,3); imagesc(predLabels,cLim);
         title('Predicted depth classes');
 end
+colormap gray;
 end

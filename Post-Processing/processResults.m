@@ -1,7 +1,8 @@
-function processResults(predictions,depths,fileNumbers,dataset,cfg)
+function processResults(predictions,depths,fileNumbers,dataset,filename,cfg)
 %PROCESSRESULTS Plots comparisons and reports error metrics of the learning
 %outcome
-%   PROCESSRESULTS(predictions,depths,fileNumbers,dataset,cfg)
+%   PROCESSRESULTS(predictions,depths,fileNumbers,dataset,filename,cfg)
+%   Saves results to the file indicated by filename.
 
 switch cfg.outputType
     case 'regression'
@@ -17,7 +18,11 @@ depthPredictions = filterDepths(depthPredictions,cfg.mapSize,'median');
 % saturate to the minimum camera range
 depthPredictions = max(depthPredictions,cfg.minRange);
 % performance metrics after filtering
-performanceMetrics(depthPredictions,depths,dataset);
+[logError,relativeAbsoluteError,relativeSquareError,...
+    rmsLinearError,rmsLogError,scaleInvariantError] = ...
+    performanceMetrics(depthPredictions,depths,dataset);
+save(filename,'depthPredictions','logError','relativeAbsoluteError',...
+    'relativeSquareError','rmsLinearError','rmsLogError','scaleInvariantError');
 % plot example image, ground truth, labels, and prediction
 plotComparison(depthPredictions,depths,fileNumbers,dataset,cfg);
 end

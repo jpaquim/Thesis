@@ -11,4 +11,10 @@ HOGAux = permute(reshape(HOGVec,cfg.nHOGBins,[]),[2 3 1]);
 HOGAux = HOGAux(cfg.indHOG);
 HOGMat = imresize(HOGAux,cfg.mapSize,'nearest');
 HOGFeatures = reshape(HOGMat,[],cfg.nHOGBins);
+% visualize HOG feature maps
+% for i = 1:cfg.nHOGBins
+%     HOGMap = patchesToImages(HOGFeatures,cfg.mapSize,1);
+%     imagesc(HOGMap(:,:,i));
+%     pause;
+% end
 end

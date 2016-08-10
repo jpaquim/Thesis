@@ -1,6 +1,8 @@
 function textons = loadDictionary(cfg)
-%LOADDICTIONARY Summary of this function goes here
-%   Detailed explanation goes here
+%LOADDICTIONARY Loads the texton dictionary
+%   textons = LOADDICTIONARY(cfg)
+%   Returns the texton dictionary, one per column in a matrix, and regenerates
+%   the dictionary if the desired configuration has changed.
 
 filename = [cfg.dataset '-dict.mat'];
 % if any of these elements change, the dictionary should be regenerated

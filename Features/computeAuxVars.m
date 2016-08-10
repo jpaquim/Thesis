@@ -4,11 +4,7 @@ function cfg = computeAuxVars(cfg)
 
 % grid of patch centers
 firstPtcRow = ceil(3^(cfg.nScales-1)*cfg.ptcHeight/2);
-% firstRow = ceil(cfg.ptcHeight/2);
-% firstRow = 20;
 firstPtcCol = ceil(3^(cfg.nScales-1)*cfg.ptcWidth/2);
-% firstCol = ceil(cfg.ptcWidth/2);
-% firstCol = 20;
 centerRows = linspace(firstPtcRow,cfg.height-firstPtcRow,cfg.nRows);
 centerCols = linspace(firstPtcCol,cfg.width-firstPtcCol,cfg.nCols);
 [centerCols,centerRows] = meshgrid(round(centerCols),round(centerRows));
@@ -50,13 +46,17 @@ end
 %  6   8  N+6 N+8 ...
 % ... ... ... ...
 % cfg.cellSize = cfg.ptcSize;
-cfg.cellSize = [10 10];
+cfg.cellSize = [11 11];
 if cfg.useFeatures(3) % HOG
-    nHOGCols = floor(cfg.width/cfg.cellSize(1));
+%     TODO: fix this
+%     nHOGCols = floor(cfg.width/cfg.cellSize(1));
     nHOGRows = floor(cfg.height/cfg.cellSize(2));
+    nHOGCols = floor(cfg.width/cfg.cellSize(1)-1);
+%     nHOGRows = floor(cfg.height/cfg.cellSize(2)-1)
 %     nHOGCols = round(cfg.width/cfg.cellSize(1));
 %     nHOGRows = round(cfg.height/cfg.cellSize(2));
-%     TODO: fix this
+%     nHOGCols = ceil(cfg.width/cfg.cellSize(1));
+%     nHOGRows = ceil(cfg.height/cfg.cellSize(2));
     HOGSize = nHOGCols*nHOGRows;
     ind0 = 1:HOGSize;
     ind1 = sort([ind0(1:4:end);ind0(2:4:end)]);
