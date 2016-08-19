@@ -48,6 +48,7 @@ if useFilters(3)
 %     applied to intensity to capture texture gradient
     channels = [channels ones(1,6)]; % Y channel
 end
+% visualize filter masks
 % for i = 1:length(filters)
 %     normFactor = sum(abs(filters{i}(:)));
 %     filters{i} = filters{i}/normFactor;

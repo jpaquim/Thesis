@@ -1,11 +1,15 @@
 function textons = generateDictionary(cfg)
-%GENERATEDICTIONARY Summary of this function goes here
-%   Detailed explanation goes here
+%GENERATEDICTIONARY Generates dictionary of textons, according to configuration
+%   textons = GENERATEDICTIONARY(cfg)
+%   Runs the Kohonen self-organizing map clustering algorithm over the dataset 
+%   to learn a set of representative textons. Configuration is read from the cfg
+%   structure, and textons are returned in a matrix where each column
+%   corresponds to an individual texton.
 
-rng(0); % seed random number generator for consistent performance in tests
+rng(0); % seed random number generator for consistent performance in testing
 
-nFiles = 'all'; % load the training image set, shuffled
-imgFiles = dataFilePaths(cfg.dataset,nFiles,true);
+% load the training image set, shuffled
+imgFiles = dataFilePaths(cfg.dataset,'all',true);
 nFiles = length(imgFiles);
 
 % maximum possible position of a texture's upper left corner
@@ -36,7 +40,7 @@ textons = zeros(linSize,cfg.nTextons);
 disp('Generating textons');
 for i = 1:nFiles
     fprintf('File: %d/%d\n',i,nFiles);
-    img = double(rgb2ycbcr(imread(imgFiles{i})));
+    img = double(rgb2ycbcr(imresize(imread(imgFiles{i}),cfg.size)));
 
 %     train a Kohonen self-organizing map for texture clustering
 

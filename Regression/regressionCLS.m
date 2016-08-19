@@ -2,7 +2,7 @@ function [model,YHatTrain,YHatTest] = ...
     regressionCLS(XTrain,YTrain,lambda,XTest)
 %REGRESSIONCLS Performs regression using the Calibrated Least Squares algorithm
 %   function [model,YHatTrain,YHatTest] = ...
-%       regressionCLS(XTrain,YTrain,lambda,XTest)
+%       REGRESSIONCLS(XTrain,YTrain,lambda,XTest)
 %   The algorithm is described in Agarwal, Kakade, et al. - Least Squares
 %   Revisited: Scalable Approaches for Multi-Class Prediction.
 %   This implementation is a slightly modified version of the code found

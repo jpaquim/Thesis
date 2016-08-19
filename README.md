@@ -2,9 +2,9 @@
 
 MATLAB code portion of my MSc thesis in self-supervised learning of depth from monocular images, given stereo data as the supervisory ground truth input.
 
-The MATLAB code is responsible for testing the learning algorithm in an offline setting, with previously available standard datasets (Make3D 1, NYU Depth V2, and KITTI 2015, more information in the corresponding folders), as well as new high resolution stereo data, collected at TU Delft with a Stereolabs ZED camera.
+The MATLAB code is responsible for testing the learning algorithm in an offline setting, with previously available standard datasets (Make3D 1, NYU Depth V2, and KITTI 2012/2015, more information in the corresponding folders), as well as new high resolution stereo data, collected at TU Delft with a Stereolabs ZED camera.
 
-After downloading the datasets and placing them in the corresponding folders, run the `processDatasets.m` script to rename the files into a consistent format.
+After downloading the datasets and placing them in the corresponding folders, run the `processDatasets` script to rename the files into a consistent format. For new datasets, the format should be individual folders with `.png` files, named `dataset-img` and `dataset-depth`, where dataset is the name of your dataset, and should be specified in `main`.
 
 ## Structure
 The program is modularized, and structured in such a way that it's relatively easy to use and expand with new features and learning algorithms. All configuration is performed in the `defaultConfiguration` function, where the desired features are specified, as well as per-feature settings. The functions that do the heavy lifting are `generateFeaturesData`, `classificationModel` and `regressionModel`, which in turn call different functions depending on the configuration. Post-processing is then controlled by `processResults`.
@@ -17,5 +17,7 @@ The code supports both classification and regression algorithms. The Calibrated 
 
 ## References
 Saxena et al - Saxena - Learning Depth from Single Monocular Images (2005)
+
 Agarwal et al - Least Squares Revisited - Scalable Approaches for Multi-Class Prediction (2013)
+
 Fan et al - LIBLINEAR: A Library for Large Linear Classification (2008)

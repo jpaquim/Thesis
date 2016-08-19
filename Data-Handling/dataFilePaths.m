@@ -24,6 +24,7 @@ imgFiles = strcat(imgFolder,{dirFiles.name}');
 dirFiles = dir([depthFolder '*.png']);
 depthFiles = strcat(depthFolder,{dirFiles.name}');
 nFiles = length(imgFiles);
+
 % testing purposes:
 TEST = true;
 if(TEST)
@@ -31,6 +32,7 @@ if(TEST)
     imgFiles = imgFiles(1:nFiles);
     depthFiles = depthFiles(1:nFiles);
 end
+
 if nFiles == 0
     error(['Folder is empty: ' imgFolder]);
 end

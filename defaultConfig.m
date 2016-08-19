@@ -1,19 +1,22 @@
 function cfg = defaultConfig(dataset)
 %DEFAULTCONFIG Default configuration for computation of features, textons, etc.
+%   cfg = DEFAULTCONFIG(dataset)
 %   The returned structure contains the definitions for various properties used
 %   throughout the program, namely the dimensions of the dataset's images, the
 %   range of the depth data, and parameters for the computed features
 
 cfg.dataset = dataset;
-fixedSize = false; % true
+
+limitSize = false; %true;
 
 % read image resolution from the first image in the training set
 [imgFile,depthFile] = dataFilePaths(cfg.dataset,1);
 imgInfo = imfinfo(imgFile);
 % image height and width in pixels
 cfg.size = [imgInfo.Height imgInfo.Width];
-if fixedSize
-    cfg.size = round(800*[1 cfg.size(2)/cfg.size(1)]);
+maxHeight = 800;
+if limitSize && cfg.size(1) > maxHeight
+    cfg.size = round(maxHeight*[1 cfg.size(2)/cfg.size(1)]);
 end
 cfg.height = cfg.size(1);
 cfg.width = cfg.size(2);
@@ -36,8 +39,9 @@ cfg.maxRange = range(2);
 % number of rows and columns in the depth map and patch grid
 depthInfo = imfinfo(depthFile);
 cfg.mapSize = [depthInfo.Height depthInfo.Width];
-if fixedSize
-    cfg.mapSize = round(55*[1 cfg.mapSize(2)/cfg.mapSize(1)]);
+maxHeight = 80;
+if limitSize && cfg.mapSize(1) > maxHeight
+    cfg.mapSize = round(maxHeight*[1 cfg.mapSize(2)/cfg.mapSize(1)]);
 end
 cfg.nRows = cfg.mapSize(1);
 cfg.nCols = cfg.mapSize(2);
@@ -45,6 +49,7 @@ cfg.nCols = cfg.mapSize(2);
 cfg.nPatches = cfg.nRows*cfg.nCols;
 % height and width of each patch in pixels
 cfg.ptcSize = 15*[1 1];
+cfg.ptcSize = 2*floor(cfg.ptcSize/2)+1; % round up to neareset odd size
 cfg.ptcHeight = cfg.ptcSize(1);
 cfg.ptcWidth = cfg.ptcSize(2);
 
@@ -67,7 +72,7 @@ cfg.nStructBins = 15;
 % HOG, Textons, Radon, StructTensor
 possibleFeatures = {'Coordinates','Filters','HOG','Textons','Radon',...
                     'StructTensor'};
-cfg.featureTypes = {'Filters','Textons','Radon'};
+cfg.featureTypes = {'Coordinates','Filters','Textons','HOG','Radon'};
 % boolean vector indicating features used
 cfg.useFeatures = ismember(possibleFeatures,cfg.featureTypes);
 
