@@ -5,7 +5,7 @@ function cfg = defaultConfig(dataset)
 %   range of the depth data, and parameters for the computed features
 
 cfg.dataset = dataset;
-fixedSize = true;
+fixedSize = false; % true
 
 % read image resolution from the first image in the training set
 [imgFile,depthFile] = dataFilePaths(cfg.dataset,1);
