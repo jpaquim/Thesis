@@ -15,7 +15,11 @@ for i = 1:nFiles
     depthMap = double(depthMap)/255;
     depthMap = cfg.minRange+(cfg.maxRange-cfg.minRange)*depthMap;
     ind = (1:cfg.nPatches)+(i-1)*cfg.nPatches;
-%     resize the depth map into the standard size
-    depths(ind) = imresize(depthMap,cfg.mapSize);
+    % resize the depth map into the standard size
+    % this way, all pixels are taken into account, while no patches are
+    % extracted in the border:
+    % depths(ind) = imresize(depthMap,cfg.mapSize);
+    map_inds = sub2ind(size(depthMap), cfg.ptcCenters(:,1), cfg.ptcCenters(:,2));
+    depths(ind) = depthMap(map_inds);
 end
 end

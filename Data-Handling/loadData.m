@@ -29,6 +29,10 @@ else
 end
 [imgFiles,depthFiles,fileNumbers] = dataFilePaths(dataset,nFiles,shuffle);
 
+% precompute auxiliary variables needed afterwards, and update cfg
+% we now do it here to get the depths at the right positions
+cfg = computeAuxVars(cfg);
+
 depths = generateDepthsData(depthFiles,cfg);
 features = generateFeaturesData(imgFiles,cfg);
 save(filename,'features','depths','fileNumbers','cfg','-v7.3');

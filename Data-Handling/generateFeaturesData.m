@@ -9,8 +9,8 @@ nFiles = length(imgFiles);
 [filters,channels] = filterBank(cfg.useFilters);
 
 textons = loadDictionary(cfg); % load the texton dictionary
-% precompute auxiliary variables needed afterwards, and update cfg
-cfg = computeAuxVars(cfg);
+% % precompute auxiliary variables needed afterwards, and update cfg
+% cfg = computeAuxVars(cfg);
 
 nInstances = nFiles*cfg.nPatches; % number of training/test instances
 features = zeros(nInstances,cfg.nFeatures);
