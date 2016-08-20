@@ -23,6 +23,8 @@ depthPredictions = max(depthPredictions,cfg.minRange);
     performanceMetrics(depthPredictions,depths,dataset);
 save(filename,'depthPredictions','logError','relativeAbsoluteError',...
     'relativeSquareError','rmsLinearError','rmsLogError','scaleInvariantError');
-% plot example image, ground truth, labels, and prediction
-plotComparison(depthPredictions,depths,fileNumbers,dataset,cfg);
+if(cfg.stepSize == 1)
+    % plot example image, ground truth, labels, and prediction
+    plotComparison(depthPredictions,depths,fileNumbers,dataset,cfg);
+end
 end

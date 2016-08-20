@@ -28,7 +28,7 @@ nFiles = length(imgFiles);
 % testing purposes:
 TEST = true;
 if(TEST)
-    nFiles = 20;
+    nFiles = 10;
     imgFiles = imgFiles(1:nFiles);
     depthFiles = depthFiles(1:nFiles);
 end

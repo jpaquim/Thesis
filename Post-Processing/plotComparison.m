@@ -17,7 +17,9 @@ scrsz = get(groot,'ScreenSize');
 figure('Position',[scrsz(3)/8 scrsz(4)/2 scrsz(3)*3/4 scrsz(4)/2]);
 switch cfg.outputType
     case 'regression'
-        cLim = [min(depths(:)) max(depths(:))];
+        cLim = [cfg.minRange cfg.maxRange];
+        % this will give a color scale depending on the image...:
+        % cLim = [min(depths(:)) max(depths(:))];
         subplot(1,3,1); image(imread(imgFile));
         title('Image');
         subplot(1,3,2); imagesc(depths,cLim);
