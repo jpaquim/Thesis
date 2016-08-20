@@ -51,7 +51,14 @@ if cfg.useFeatures(3) % HOG
 %     TODO: fix this
 %     nHOGCols = floor(cfg.width/cfg.cellSize(1));
     nHOGRows = floor(cfg.height/cfg.cellSize(2));
+    % Guido: does the problem lie with odd numbers?
+    if(mod(nHOGRows, 2) == 1)
+        nHOGRows = floor(cfg.height/cfg.cellSize(2)-1);
+    end
     nHOGCols = floor(cfg.width/cfg.cellSize(1)-1);
+    if(mod(nHOGCols, 2) == 1)
+        nHOGCols = floor(cfg.width/cfg.cellSize(1));
+    end
 %     nHOGRows = floor(cfg.height/cfg.cellSize(2)-1)
 %     nHOGCols = round(cfg.width/cfg.cellSize(1));
 %     nHOGRows = round(cfg.height/cfg.cellSize(2));

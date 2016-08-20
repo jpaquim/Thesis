@@ -14,6 +14,8 @@ for flt = 1:nFilters
                 cfg.ptcCols{scl}(:,ptc));
             feat = 2*(scl+(flt-1)*cfg.nScales);
 %             calculate the energies for each patch
+% Guido: could be done quicker by calculating abs / .^2 outside of the
+% patch loop and using integral images of the results
             fltFeatures(ptc,feat-1) = sum(abs(imgPatch(:)));
             fltFeatures(ptc,feat) = sum(imgPatch(:).^2);
         end
