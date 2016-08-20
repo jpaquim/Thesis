@@ -5,7 +5,8 @@ function depths = generateDepthsData(depthFiles,cfg)
 %   required data is read from the cfg configuration structure.
 
 nFiles = length(depthFiles);
-nInstances = nFiles*cfg.nPatches; % number of training/test instances
+nRealPatches = length(1:cfg.stepSize:cfg.nPatches);
+nInstances = nFiles*nRealPatches; % number of training/test instances
 depths = zeros(nInstances,1);
 for i = 1:nFiles
     depthMap = imread(depthFiles{i});
@@ -14,12 +15,13 @@ for i = 1:nFiles
     end
     depthMap = double(depthMap)/255;
     depthMap = cfg.minRange+(cfg.maxRange-cfg.minRange)*depthMap;
-    ind = (1:cfg.nPatches)+(i-1)*cfg.nPatches;
+    ind = (1:nRealPatches)+(i-1)*nRealPatches;
     % resize the depth map into the standard size
     % this way, all pixels are taken into account, while no patches are
     % extracted in the border:
     % depths(ind) = imresize(depthMap,cfg.mapSize);
-    map_inds = sub2ind(size(depthMap), cfg.ptcCenters(:,1), cfg.ptcCenters(:,2));
+    map_inds = sub2ind(size(depthMap), cfg.ptcCenters(1:cfg.stepSize:cfg.nPatches,1), cfg.ptcCenters(1:cfg.stepSize:cfg.nPatches,2));
     depths(ind) = depthMap(map_inds);
+    
 end
 end

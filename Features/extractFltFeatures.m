@@ -9,7 +9,7 @@ for flt = 1:nFilters
     imgFilt = imfilter(imgYCbCr(:,:,channels(flt)),filters{flt},...
         'symmetric','conv');
     for scl = 1:cfg.nScales
-        for ptc = 1:cfg.nPatches
+        for ptc = 1:cfg.stepSize:cfg.nPatches
             imgPatch = imgFilt(cfg.ptcRows{scl}(:,ptc),...
                 cfg.ptcCols{scl}(:,ptc));
             feat = 2*(scl+(flt-1)*cfg.nScales);

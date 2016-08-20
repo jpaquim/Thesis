@@ -17,6 +17,8 @@ else
 end
 % HOG features
 if cfg.useFeatures(3)
+    % extract HOG features
+    % TODO: also use cfg.stepSize in a sensible way here:
     HOGFeatures = extractHOGFeaturesReshaped(imgRGB,cfg);
 else
     HOGFeatures = [];
@@ -29,4 +31,5 @@ else
     txtFeatures = []; radonFeatures = []; structFeatures = [];
 end
 features = [posFeatures fltFeatures HOGFeatures txtFeatures radonFeatures structFeatures];
+features = features(1:cfg.stepSize:cfg.nPatches, :);
 end

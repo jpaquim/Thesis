@@ -33,7 +33,7 @@ else
     structFeatures = [];
 end
 
-for ptc = 1:cfg.nPatches
+for ptc = 1:cfg.stepSize:cfg.nPatches
     imgPatch = imgYCbCr(cfg.txtRows(:,ptc),cfg.txtCols(:,ptc),1);
     if computeTextons
         texture = reshape(imgPatch,[],1);
