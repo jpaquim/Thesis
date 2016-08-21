@@ -35,7 +35,7 @@ if(saveAsWEKA)
    saveWEKA(cfg, trainDataset, trainFeatures, trainDepths); 
 end
 
-if strcmp(trainDataset,testDataset) % use cross validation on the same set
+if strcmp(trainDataset,testDataset) % if only one set, use cross validation on the same set
     proportion = 0.7;
     shuffle = false; % train on the first part, test on the rest
     [trainFeatures,testFeatures,trainDepths,testDepths,...
@@ -62,37 +62,47 @@ testFeatures = normalizeFeatures(testFeatures,offset,scale);
 trainFeatures = [trainFeatures ones(size(trainFeatures,1),1)];
 testFeatures = [testFeatures ones(size(testFeatures,1),1)];
 
-cfg.outputType = 'regression'; % uncomment for regression
-% cfg.outputType = 'classification'; % uncomment for classification
-modelType = 'calibrated ls';
-% train the supervised learning model
-switch cfg.outputType
-    case 'regression'
-        [model,trainPredictions,testPredictions] = ...
-            regressionModel(trainFeatures,trainDepths,testFeatures,modelType);
-    case 'classification'
-%         number of classes used in the depth labeling
-        cfg.nClasses = 10;
-%         types of interval spacing: 'lin' for linear, 'log' for
-%          logarithmic, 'opt' for optimal, uniform histogram over classes
-        cfg.classType = 'opt';
-%         generate interval edges and centers
-        [cfg.classEdges,cfg.classCenters] = ...
-            depthIntervals(trainDepths,cfg.nClasses,cfg.classType);
-%         label the depth data into discrete classes
-        trainLabels = labelDepths(trainDepths,cfg.classEdges);
-        testLabels = labelDepths(testDepths,cfg.classEdges);
-        [model,trainPredictions,testPredictions] = classificationModel(...
-            trainFeatures,trainLabels,testFeatures,testLabels,modelType);
+trainModelFilename = [trainDataset '-model-train'];
+if(exist(trainModelFilename, 'file'))
+    % if the filename exists, do not train again:
+    load(trainModelFilename);
+else
+    modelType = 'calibrated ls';
+    % train the supervised learning model
+    switch cfg.outputType
+        case 'regression'
+            [model,trainPredictions,testPredictions] = ...
+                regressionModel(trainFeatures,trainDepths,testFeatures,modelType);
+        case 'classification'
+            %         number of classes used in the depth labeling
+            cfg.nClasses = 10;
+            %         types of interval spacing: 'lin' for linear, 'log' for
+            %          logarithmic, 'opt' for optimal, uniform histogram over classes
+            cfg.classType = 'opt';
+            %         generate interval edges and centers
+            [cfg.classEdges,cfg.classCenters] = ...
+                depthIntervals(trainDepths,cfg.nClasses,cfg.classType);
+            %         label the depth data into discrete classes
+            trainLabels = labelDepths(trainDepths,cfg.classEdges);
+            testLabels = labelDepths(testDepths,cfg.classEdges);
+            [model,trainPredictions,testPredictions] = classificationModel(...
+                trainFeatures,trainLabels,testFeatures,testLabels,modelType);
+    end
+    
+    % save the results, so that retraining is not necessary
+    save(trainModelFilename, 'model', 'trainPredictions', 'testPredictions');
 end
 
-% rebuild the full depth maps for plotting, using ones as placeholders in
-% low-confidence patches
-trainAuxDepths = ones(cfg.nPatches*length(trainFileNumbers),1);
-trainAuxDepths(trainValidPatches,:) = trainPredictions;
-trainPredictions = trainAuxDepths;
-trainAuxDepths(trainValidPatches,:) = trainDepths;
-trainDepths = trainAuxDepths;
+if(cfg.stepSize == 1)
+    % rebuild the full depth maps for plotting, using ones as placeholders in
+    % low-confidence patches
+    % requires the step size to be 1
+    trainAuxDepths = ones(cfg.nPatches*length(trainFileNumbers),1);
+    trainAuxDepths(trainValidPatches,:) = trainPredictions;
+    trainPredictions = trainAuxDepths;
+    trainAuxDepths(trainValidPatches,:) = trainDepths;
+    trainDepths = trainAuxDepths;
+end
 
 % perform post-processing and analysis on the predicted results
 trainResultsFilename = [trainDataset '-results-train'];

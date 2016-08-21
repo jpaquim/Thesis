@@ -47,7 +47,7 @@ cfg.nRows = cfg.mapSize(1);
 cfg.nCols = cfg.mapSize(2);
 % total number of patches
 cfg.nPatches = cfg.nRows*cfg.nCols;
-cfg.stepSize = 5; % a step size of 1 leads to extracting features at all pixel locations
+cfg.stepSize = 20; % a step size of 1 leads to extracting features at all pixel locations
 % height and width of each patch in pixels
 cfg.ptcSize = 15*[1 1];
 cfg.ptcSize = 2*floor(cfg.ptcSize/2)+1; % round up to neareset odd size
@@ -95,5 +95,8 @@ featureDims = [2;2*cfg.nFilters*cfg.nScales;cfg.nHOGBins;cfg.nTextons;...
                2*cfg.nRadonAngles;cfg.nStructBins];
 % total number of features
 cfg.nFeatures = dot(featureDims,cfg.useFeatures);
+
+cfg.outputType = 'regression'; % uncomment for regression
+% cfg.outputType = 'classification'; % uncomment for classification
 
 end

@@ -26,7 +26,7 @@ depthFiles = strcat(depthFolder,{dirFiles.name}');
 nFiles = length(imgFiles);
 
 % testing purposes:
-TEST = true;
+TEST = false;
 if(TEST)
     nFiles = 10;
     imgFiles = imgFiles(1:nFiles);

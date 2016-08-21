@@ -13,8 +13,11 @@ switch cfg.outputType
 %         convert labels to depths using the class centers
         depthPredictions = cfg.classCenters(predictions)';
 end
-% filter depths
-depthPredictions = filterDepths(depthPredictions,cfg.mapSize,'median');
+
+if(cfg.stepSize == 1)
+    % filter depths in image space - needs the step size to be 1:
+    depthPredictions = filterDepths(depthPredictions,cfg.mapSize,'median');
+end
 % saturate to the minimum camera range
 depthPredictions = max(depthPredictions,cfg.minRange);
 % performance metrics after filtering
