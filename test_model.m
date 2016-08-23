@@ -33,10 +33,13 @@ cfg = computeAuxVars(cfg);
 
 h = figure('Name', 'Predicted depths', 'NumberTitle', 'off');
 set(gcf, 'Color', [1 1 1]);
-
+meanDepths= zeros(length(depthFiles), 1);
+medianDepths= zeros(length(depthFiles), 1);
+Depths = zeros(length(depthFiles), 1);
 for i = 1:length(depthFiles)
     % get depths and features:
     depths = generateDepthsData(depthFiles,cfg);
+    Depths(i) = mean(depths);
     features = generateFeaturesData(imgFiles,cfg);
     % normalize the training features to the [0 1] range
     [features,offset,scale] = normalizeFeatures(features);
@@ -44,6 +47,8 @@ for i = 1:length(depthFiles)
     features = [features ones(size(features,1),1)];
     % predict depths:
     predictions = predictCLS(features, model);
+    medianDepths(i) = median(predictions);
+    meanDepths(i) = mean(predictions);
     % get the performance metrics:
     [logError,relativeAbsoluteError,relativeSquareError,...
     rmsLinearError,rmsLogError,scaleInvariantError] = ...
@@ -56,3 +61,11 @@ for i = 1:length(depthFiles)
     DIm = reshape(predDepths, [cfg.nRows, cfg.nCols]);
     imagesc(DIm); title('Depths');
 end
+
+% plot depths per image:
+h2 = figure();
+plot(1:length(depthFiles), Depths);
+hold on;
+plot(1:length(depthFiles), meanDepths);
+plot(1:length(depthFiles), medianDepths);
+legend('GT depths', 'Mean predictions', 'Median predictions');
