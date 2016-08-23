@@ -19,6 +19,7 @@ end
 cholLowerX = chol(XTrain'*XTrain+regularizer,'lower');
 % initialize W with the least squares estimate
 W = cholLowerX'\(cholLowerX\(XTrain'*YTrain));
+Ws(:,1) = W;
 YTildeTrain = XTrain*W;
 YTildeTest = XTest*W;
 maxIters = 50;
@@ -28,10 +29,12 @@ for t = 1:maxIters
     GTest = [YTildeTest YTildeTest.^2/2 YTildeTest.^3/6 YTildeTest.^4/24];
     cholLowerG = chol(G'*G+sqrt(n)*eye(4*k),'lower');
     WTilde = cholLowerG'\(cholLowerG\(G'*YTrain));
+    WTildes(:,t) = WTilde;
     YHatTrain = G*WTilde;
     YHatTest = GTest*WTilde;
 %     fit the residual
     W = cholLowerX'\(cholLowerX\(XTrain'*(YTrain-YHatTrain)));
+    Ws(:,t+1) = W;
     prevYTilde = YTildeTrain;
     YTildeTrain = YHatTrain+XTrain*W;
     YTildeTest = YHatTest+XTest*W;
@@ -41,6 +44,6 @@ for t = 1:maxIters
         break
     end
 end
-model.W = W;
-model.WTilde = WTilde;
+model.Ws = Ws;
+model.WTildes = WTildes;
 end

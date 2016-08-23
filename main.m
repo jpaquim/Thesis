@@ -90,8 +90,11 @@ else
     end
     
     % save the results, so that retraining is not necessary
-    save(trainModelFilename, 'model', 'trainPredictions', 'testPredictions');
+    save(trainModelFilename, 'model', 'trainPredictions', 'testPredictions', 'offset', 'scale');
 end
+
+% For checking if the predictions YHat (based on model) coincide with the testPredictions.
+% YHat = predictCLS(testFeatures, model);
 
 if(cfg.stepSize == 1)
     % rebuild the full depth maps for plotting, using ones as placeholders in
